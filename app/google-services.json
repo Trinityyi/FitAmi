@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "553368785436",
+    "firebase_url": "https://fitami-51386.firebaseio.com",
+    "project_id": "fitami-51386",
+    "storage_bucket": "fitami-51386.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553368785436:android:f140d956da337924",
+        "android_client_info": {
+          "package_name": "com.trinity.isabelle.fitami"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553368785436-b9opg2oket3c9umf6nednh5u65c1nc39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7b2SjJ9NuAaqp5sSmFtaCGLSZvo42Xn0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

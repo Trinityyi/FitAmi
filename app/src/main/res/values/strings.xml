@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">FitAmi</string>
+
+    <string name="preference_master_key">com.trinity.isabelle.fitami.preferences</string>
+    <string name="preference_time_key">com.trinity.isabelle.fitami.preferences.key.time</string>
+    <string name="preference_step_key">com.trinity.isabelle.fitami.preferences.key.step</string>
+    <string name="preference_meter_key">com.trinity.isabelle.fitami.preferences.key.meter</string>
+    <string name="preference_latitude_key">com.trinity.isabelle.fitami.preferences.key.latitude</string>
+    <string name="preference_longitude_key">com.trinity.isabelle.fitami.preferences.key.longitude</string>
+    <string name="preference_uid_key">com.trinity.isabelle.fitami.preferences.key.user</string>
+    <string name="preference_nickname_key">com.trinity.isabelle.fitami.preferences.key.nickname</string>
+    <string name="preference_points_key">com.trinity.isabelle.fitami.preferences.key.points</string>
+
+    <string name="title_activity_main">MainActivity</string>
+
+    // Drawer
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    // SLIDE
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">START</string>
+    <string name="slide_1_title">Welcome to FitAmi!</string>
+    <string name="slide_1_desc">FitAmi yada yada yada</string>
+    <string name="slide_2_title">Movie Tickets</string>
+    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+
+</resources>

@@ -1,0 +1,288 @@
+package com.trinity.isabelle.fitami;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class WelcomeActivity extends AppCompatActivity {
+
+    private ViewPager viewPager;
+    private int[] layouts;
+    private Button btnNext;
+    TextView editGender, editBirth, editWeight, editHeight;
+    DatabaseReference rootRef,userRef;
+    final Context c = this;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_welcome);
+
+        viewPager = (ViewPager) findViewById(R.id.viewPagerWelcome);
+        btnNext = (Button) findViewById(R.id.btnWelcomeNext);
+
+        // layouts of all welcome sliders
+        layouts = new int[]{
+                R.layout.welcome_slide,
+                R.layout.activity_settings
+        };
+
+        WelcomeActivity.MyViewPagerAdapter myViewPagerAdapter = new WelcomeActivity.MyViewPagerAdapter();
+        viewPager.setAdapter(myViewPagerAdapter);
+
+        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //database reference pointing to root of database
+        rootRef = FirebaseDatabase.getInstance().getReference();
+        //database reference pointing to user node
+        userRef = rootRef.child("users").child(userId);
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+        sharedPref.edit().putString(getString(R.string.preference_uid_key), userId).apply();
+
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // checking for last page
+                // if last page home screen will be launched
+                int current = getItem(+1);
+                if (current < layouts.length) {
+                    // move to next screen
+                    viewPager.setCurrentItem(current);
+                }
+                else {
+
+                    launchTutorialScreen();
+                }
+            }
+        });
+
+    }
+
+    private int getItem(int i) {
+        return viewPager.getCurrentItem() + i;
+    }
+
+    private void launchTutorialScreen() {
+        // Save data
+        //String gender = editGender.getText().toString();
+        String dateOfBirth = editBirth.getText().toString();
+        String height = editHeight.getText().toString();
+        String weight = editWeight.getText().toString();
+
+        //push creates a unique id in database
+        //userRef.child("gender").setValue(gender);
+        userRef.child("dateOfBirth").setValue(dateOfBirth);
+        userRef.child("height").setValue(height);
+        userRef.child("weight").setValue(weight);
+        startActivity(new Intent(WelcomeActivity.this, TutorialActivity.class));
+        finish();
+    }
+
+    //  viewpager change listener
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int position) {
+            // changing the next button text 'NEXT' / 'GOT IT'
+            if (position == layouts.length - 1) {
+                // last page. make button text to GOT IT
+                btnNext.setText(getString(R.string.start));
+
+            }
+            else {
+                // still pages are left
+                btnNext.setText(getString(R.string.next));
+            }
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
+    /**
+     * View pager adapter
+     */
+    private class MyViewPagerAdapter extends PagerAdapter {
+        private LayoutInflater layoutInflater;
+
+        private MyViewPagerAdapter() {
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            View view = layoutInflater.inflate(layouts[position], container, false);
+            container.addView(view);
+
+            if (position==layouts.length-1){
+                editBirth = (TextView) view.findViewById(R.id.editBirth);
+                editHeight = (TextView) view.findViewById(R.id.editHeight);
+                editWeight = (TextView) view.findViewById(R.id.editWeight);
+
+                editBirth.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+                        View mView = layoutInflaterAndroid.inflate(R.layout.dialogbox_birth, null);
+                        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+                        alertDialogBuilderUserInput.setView(mView);
+
+                        final NumberPicker year = (NumberPicker) mView.findViewById(R.id.yearPicker);
+                        final NumberPicker month = (NumberPicker) mView.findViewById(R.id.monthPicker);
+                        alertDialogBuilderUserInput
+                                .setCancelable(false)
+                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        // ToDo get user input here
+                                        String content = month.getValue()+"/"+year.getValue(); //gets you the contents of edit text
+                                        editBirth.setText(content); //displays it in a textview..
+                                    }
+                                })
+
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialogBox, int id) {
+                                                dialogBox.cancel();
+                                            }
+                                        });
+
+                        year.setMinValue(1920);
+                        year.setMaxValue(2050);
+                        year.setValue(1990);
+
+                        month.setMinValue(1);
+                        month.setMaxValue(12);
+                        month.setValue(6);
+
+
+                        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+                        alertDialogAndroid.show();
+                    }
+                });
+                editHeight.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+                        View mView = layoutInflaterAndroid.inflate(R.layout.dialogbox_height, null);
+                        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+                        alertDialogBuilderUserInput.setView(mView);
+
+                        final NumberPicker cm = (NumberPicker) mView.findViewById(R.id.heightPicker);
+                        alertDialogBuilderUserInput
+                                .setCancelable(false)
+                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        // ToDo get user input here
+                                        String content = cm.getValue()+" cm"; //gets you the contents of edit text
+                                        editHeight.setText(content); //displays it in a textview..
+                                    }
+                                })
+
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialogBox, int id) {
+                                                dialogBox.cancel();
+                                            }
+                                        });
+
+                        cm.setMinValue(120);
+                        cm.setMaxValue(230);
+                        cm.setValue(170);
+
+
+                        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+                        alertDialogAndroid.show();
+                    }
+                });
+
+                editWeight.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+                        View mView = layoutInflaterAndroid.inflate(R.layout.dialogbox_weight, null);
+                        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+                        alertDialogBuilderUserInput.setView(mView);
+
+                        final NumberPicker kilo = (NumberPicker) mView.findViewById(R.id.kiloPicker);
+                        final NumberPicker gram = (NumberPicker) mView.findViewById(R.id.gramPicker);
+                        alertDialogBuilderUserInput
+                                .setCancelable(false)
+                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        // ToDo get user input here
+                                        String content = kilo.getValue()+"."+gram.getValue()+" kg"; //gets you the contents of edit text
+                                        editWeight.setText(content); //displays it in a textview..
+                                    }
+                                })
+
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialogBox, int id) {
+                                                dialogBox.cancel();
+                                            }
+                                        });
+
+                        kilo.setMinValue(20);
+                        kilo.setMaxValue(299);
+                        kilo.setValue(70);
+
+                        gram.setMinValue(0);
+                        gram.setMaxValue(9);
+                        gram.setValue(0);
+
+                        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+                        alertDialogAndroid.show();
+                    }
+                });
+            }
+
+            return view;
+        }
+
+        @Override
+        public int getCount() {
+            return layouts.length;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj;
+        }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+    }
+}
