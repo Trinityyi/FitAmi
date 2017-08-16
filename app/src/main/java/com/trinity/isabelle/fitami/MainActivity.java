@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,23 +73,54 @@ public class MainActivity extends AppCompatActivity
         final String userId = sharedPref.getString(getString(R.string.preference_uid_key), "00000");
         final DatabaseReference rootRef, userRef, dayRef;
         rootRef = FirebaseDatabase.getInstance().getReference();
+
+        final ValueEventListener userScoreListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(Objects.equals(String.valueOf(sharedPref.getString(getString(R.string.preference_points_key), "undefined")), "undefined")){
+                    rootRef.child("days").child(getToday()).child(userId).child("points").setValue(String.valueOf(dataSnapshot.child("score").getValue(Integer.class)));
+                    sharedPref.edit().putString(getString(R.string.preference_points_key), String.valueOf(dataSnapshot.child("score").getValue(Integer.class))).apply();
+                }
+                rootRef.child("users").child(userId).removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                //                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                                // ...
+            }
+        };
+
+
         final ValueEventListener usernameListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(userId)) {
-//                    sharedPref.edit().putInt(getString(R.string.preference_time_key), Integer.valueOf(dataSnapshot.child("days").child(getToday()).child(userId).getValue(String.class))).apply();
-                    Log.d("naaa", String.valueOf(dataSnapshot.child(userId).child("steps").getValue(Integer.class)));
-                    // TODO: Load shared prefs from Firebase
+
+                    sharedPref.edit().putString(getString(R.string.preference_nickname_key), String.valueOf(dataSnapshot.child(userId).child("nickname").getValue(String.class))).apply();
+                    sharedPref.edit().putString(getString(R.string.preference_points_key), String.valueOf(dataSnapshot.child(userId).child("points").getValue(String.class))).apply();
+                    sharedPref.edit().putInt(getString(R.string.preference_time_key), Integer.valueOf(dataSnapshot.child(userId).child("activeTime").getValue(Integer.class))).apply();
+                    sharedPref.edit().putInt(getString(R.string.preference_step_key), Integer.valueOf(dataSnapshot.child(userId).child("steps").getValue(Integer.class))).apply();
+                    sharedPref.edit().putInt(getString(R.string.preference_meter_key), Integer.valueOf(dataSnapshot.child(userId).child("distance").getValue(Integer.class))).apply();
+
+                    Log.d("naaa nick", String.valueOf(sharedPref.getString(getString(R.string.preference_nickname_key), "")));
+                    Log.d("naaa points", String.valueOf(sharedPref.getString(getString(R.string.preference_points_key), "")));
+                    Log.d("naaa time", String.valueOf(sharedPref.getInt(getString(R.string.preference_time_key), 0)));
+                    Log.d("naaa steps", String.valueOf(sharedPref.getInt(getString(R.string.preference_step_key), 0)));
+                    Log.d("naaa distance", String.valueOf(sharedPref.getInt(getString(R.string.preference_meter_key), 0)));
+                    // Only kill the event listener here, as this event will fire even if the data does
+                    // not exist (right after it's added by the else statement below).
+                    rootRef.child("days").child(getToday()).removeEventListener(this);
                 }
                 else{
                     rootRef.child("days").child(getToday()).child(userId).child("nickname").setValue("todo");
-                    rootRef.child("days").child(getToday()).child(userId).child("points").setValue("todo");
+                    rootRef.child("days").child(getToday()).child(userId).child("points").setValue("undefined");
                     rootRef.child("days").child(getToday()).child(userId).child("activeTime").setValue(0);
                     rootRef.child("days").child(getToday()).child(userId).child("steps").setValue(0);
                     rootRef.child("days").child(getToday()).child(userId).child("distance").setValue(0);
                     // TODO: Initialize shared prefs for the day
                 }
-                rootRef.child("days").child(getToday()).removeEventListener(this);
             }
 
             @Override
@@ -98,6 +130,7 @@ public class MainActivity extends AppCompatActivity
                 // ...
             }
         };
+        rootRef.child("users").child(userId).addValueEventListener(userScoreListener);
         rootRef.child("days").child(getToday()).addValueEventListener(usernameListener);
 //        Log.d("nada", dayRef.getKey());
 

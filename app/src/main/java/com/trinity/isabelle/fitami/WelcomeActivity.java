@@ -94,6 +94,10 @@ public class WelcomeActivity extends AppCompatActivity {
         userRef.child("dateOfBirth").setValue(dateOfBirth);
         userRef.child("height").setValue(height);
         userRef.child("weight").setValue(weight);
+        for(int i = 0; i < 24; i++){
+            userRef.child("medals").child(String.valueOf(i)).setValue(0);
+        }
+        userRef.child("score").setValue(0);
         startActivity(new Intent(WelcomeActivity.this, TutorialActivity.class));
         finish();
     }
