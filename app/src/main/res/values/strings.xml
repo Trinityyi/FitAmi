@@ -8,6 +8,7 @@
     <string name="preference_latitude_key">com.trinity.isabelle.fitami.preferences.key.latitude</string>
     <string name="preference_longitude_key">com.trinity.isabelle.fitami.preferences.key.longitude</string>
     <string name="preference_uid_key">com.trinity.isabelle.fitami.preferences.key.user</string>
+    <string name="preference_date_key">com.trinity.isabelle.fitami.preferences.key.date</string>
     <string name="preference_nickname_key">com.trinity.isabelle.fitami.preferences.key.nickname</string>
     <string name="preference_points_key">com.trinity.isabelle.fitami.preferences.key.points</string>
 

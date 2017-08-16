@@ -57,22 +57,24 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onReceive(Context context, Intent intent) {
                 SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-                long lastTime = sharedPref.getLong(getString(R.string.preference_time_key), -1);
-                long  lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0);
                 float lastLatitude = sharedPref.getFloat(getString(R.string.preference_latitude_key), 0.0f);
                 float lastLongitude = sharedPref.getFloat(getString(R.string.preference_longitude_key), 0.0f);
+                long lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
+                long  lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
+                long lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
                 // TODO: Maybe we should turn this into a string resource.
                 Log.d("Received ", intent.getStringExtra("com.trinity.isabelle.fitami.backgroundservice"));
                 TextView logger = (TextView) findViewById(R.id.logger);
-                logger.setText("Location: "+lastLatitude+" , "+lastLongitude+" - Time: "+lastTime+" - Steps: "+lastSteps);
+                logger.setText("Location: "+lastLatitude+" , "+lastLongitude+" - Time: "+lastTime+" - Steps: "+lastSteps+" - Meters: "+lastMeters);
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(String.valueOf(MainActivity.class)));
 
         final SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
         final String userId = sharedPref.getString(getString(R.string.preference_uid_key), "00000");
-        final DatabaseReference rootRef, userRef, dayRef;
+        final DatabaseReference rootRef;
         rootRef = FirebaseDatabase.getInstance().getReference();
+        sharedPref.edit().putString(getString(R.string.preference_date_key), getToday()).apply();
 
         final ValueEventListener userScoreListener = new ValueEventListener() {
             @Override
@@ -100,15 +102,10 @@ public class MainActivity extends AppCompatActivity
 
                     sharedPref.edit().putString(getString(R.string.preference_nickname_key), String.valueOf(dataSnapshot.child(userId).child("nickname").getValue(String.class))).apply();
                     sharedPref.edit().putString(getString(R.string.preference_points_key), String.valueOf(dataSnapshot.child(userId).child("points").getValue(String.class))).apply();
-                    sharedPref.edit().putInt(getString(R.string.preference_time_key), Integer.valueOf(dataSnapshot.child(userId).child("activeTime").getValue(Integer.class))).apply();
-                    sharedPref.edit().putInt(getString(R.string.preference_step_key), Integer.valueOf(dataSnapshot.child(userId).child("steps").getValue(Integer.class))).apply();
-                    sharedPref.edit().putInt(getString(R.string.preference_meter_key), Integer.valueOf(dataSnapshot.child(userId).child("distance").getValue(Integer.class))).apply();
+                    sharedPref.edit().putLong(getString(R.string.preference_time_key), Long.valueOf(dataSnapshot.child(userId).child("activeTime").getValue(Long.class))).apply();
+                    sharedPref.edit().putLong(getString(R.string.preference_step_key), Long.valueOf(dataSnapshot.child(userId).child("steps").getValue(Long.class))).apply();
+                    sharedPref.edit().putLong(getString(R.string.preference_meter_key), Long.valueOf(dataSnapshot.child(userId).child("distance").getValue(Long.class))).apply();
 
-                    Log.d("naaa nick", String.valueOf(sharedPref.getString(getString(R.string.preference_nickname_key), "")));
-                    Log.d("naaa points", String.valueOf(sharedPref.getString(getString(R.string.preference_points_key), "")));
-                    Log.d("naaa time", String.valueOf(sharedPref.getInt(getString(R.string.preference_time_key), 0)));
-                    Log.d("naaa steps", String.valueOf(sharedPref.getInt(getString(R.string.preference_step_key), 0)));
-                    Log.d("naaa distance", String.valueOf(sharedPref.getInt(getString(R.string.preference_meter_key), 0)));
                     // Only kill the event listener here, as this event will fire even if the data does
                     // not exist (right after it's added by the else statement below).
                     rootRef.child("days").child(getToday()).removeEventListener(this);
@@ -132,7 +129,6 @@ public class MainActivity extends AppCompatActivity
         };
         rootRef.child("users").child(userId).addValueEventListener(userScoreListener);
         rootRef.child("days").child(getToday()).addValueEventListener(usernameListener);
-//        Log.d("nada", dayRef.getKey());
 
         // Write the last updated time as "-1" in the shared preferences, so that the service
         // knows this is a cold start.
@@ -140,8 +136,8 @@ public class MainActivity extends AppCompatActivity
 //        sharedPref.edit().putInt(getString(R.string.preference_time_key), -1).apply();
         // TODO: Open service, it will know the existing data
         // Start the service and let it do its thing
-//        Intent backgroundService = new Intent(this, FitamiBackgroundService.class);
-//        startService(backgroundService);
+        Intent backgroundService = new Intent(this, FitamiBackgroundService.class);
+        startService(backgroundService);
     }
 
     public String getToday(){
