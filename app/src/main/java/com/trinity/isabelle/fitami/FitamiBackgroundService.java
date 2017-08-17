@@ -33,10 +33,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -60,6 +65,8 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     private double lastLongitude;
     private long lastStepCounterNanoTime;
     private long lastStepCounterValue;
+    private long lastScore;
+    private String nickname;
     private String userId;
     private String currentDate;
     private DatabaseReference rootRef;
@@ -101,6 +108,41 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         }
     };
 
+    Runnable dateUpdate = new Runnable() {
+        @Override
+        public void run() {
+            // Write last day's data to Firebase
+            rootRef.child("days").child(currentDate).child(userId).child("activeTime").setValue(dailyTime);
+            rootRef.child("days").child(currentDate).child(userId).child("distance").setValue(dailyMeters);
+            rootRef.child("days").child(currentDate).child(userId).child("steps").setValue(dailySteps);
+            // Initialize data for the new day
+            dailyTime = 0;
+            dailyMeters = 0;
+            dailySteps = 0;
+            currentDate = getToday();
+            lastScore = 0; // TODO: Figure out score calculations
+            SharedPreferences sharedPref = FitamiBackgroundService.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+            sharedPref.edit().putString(getString(R.string.preference_date_key), currentDate).apply();
+            sharedPref.edit().putLong(getString(R.string.preference_time_key), dailyTime).apply();
+            sharedPref.edit().putLong(getString(R.string.preference_step_key), dailySteps).apply();
+            sharedPref.edit().putLong(getString(R.string.preference_meter_key), dailyMeters).apply();
+            sharedPref.edit().putString(getString(R.string.preference_points_key), String.valueOf(lastScore)).apply();
+            // Write new day to Firebase
+            rootRef.child("days").child(getToday()).child(userId).child("nickname").setValue(nickname);
+            rootRef.child("days").child(getToday()).child(userId).child("points").setValue(lastScore);
+            rootRef.child("days").child(getToday()).child(userId).child("activeTime").setValue(0);
+            rootRef.child("days").child(getToday()).child(userId).child("steps").setValue(0);
+            rootRef.child("days").child(getToday()).child(userId).child("distance").setValue(0);
+            // TODO: Set daily medal / challenge / whatever-we-call-this-stuff
+            // Message mainActivity
+            Intent intent = new Intent(String.valueOf(MainActivity.class));
+            intent.putExtra("com.trinity.isabelle.fitami.backgroundservice", "Data has been updated!");
+            LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(intent);
+            // Countdown until next day
+            handler.postDelayed(this, getMillisUntilTomorrow());
+        }
+    };
+
 
     // Constructor
     public FitamiBackgroundService() {
@@ -117,6 +159,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         dailyTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
         dailyMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
         userId = sharedPref.getString(getString(R.string.preference_uid_key), "00000");
+        nickname = sharedPref.getString(getString(R.string.preference_nickname_key), "undefined");
         currentDate = sharedPref.getString(getString(R.string.preference_date_key), "19700101");
         rootRef = FirebaseDatabase.getInstance().getReference();
 
@@ -147,6 +190,8 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
 
         sensorUpdate.run();
         firebaseUpdate.run();
+        final Handler dateHandler = new Handler();
+        dateHandler.postDelayed(dateUpdate, getMillisUntilTomorrow());
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -199,6 +244,23 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         double c = 2 * Math.asin(Math.sqrt(a));
         long distanceInMeters = Math.round(6371000 * c);
         return distanceInMeters;
+    }
+
+    // Helper function to get milliseconds until midnight
+    private static long getMillisUntilTomorrow(){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        long howMany = (c.getTimeInMillis()-System.currentTimeMillis());
+        return howMany;
+    }
+
+    // Helper function to get the current day in string format
+    public static String getToday(){
+        return new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
     }
 
     @Override

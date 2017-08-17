@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Set persistence for Firebase to avoid problems
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         // Used for message handling.
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
             @Override
