@@ -1,16 +1,3 @@
-/*
-TODO:
-    - It will start with today's data, no questions asked
-    - Calculate data in methods
-    - Write to firebase whenever
-
-
-
-
- */
-
-
-
 package com.trinity.isabelle.fitami;
 
 import android.app.IntentService;
@@ -57,89 +44,92 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     private Handler handler = new Handler();
     private final long SENSOR_UPDATE_LATENCY = 15000; // Update frequency should be 15s
     private final long FIREBASE_UPDATE_LATENCY = 300000; // Firebase update frequency should be 300s
-    private long dailyTime;
-    private long dailySteps;
-    private long dailyMeters;
-    private long currentMeters;
-    private double lastLatitude;
-    private double lastLongitude;
-    private long lastStepCounterNanoTime;
-    private long lastStepCounterValue;
-    private long lastScore;
-    private String nickname;
-    private String userId;
-    private String currentDate;
+    private long dailyTime, dailySteps, dailyMeters, currentMeters, lastStepCounterNanoTime, lastStepCounterValue, lastScore;
+    private double lastLatitude, lastLongitude;
+    private String nickname, userId, currentDate;
     private DatabaseReference rootRef;
+    private SharedPreferences sharedPref;
 
-
+    // Update sensor data in preferences
     Runnable sensorUpdate = new Runnable() {
         @Override
         public void run() {
-            Log.d("Sensors", "running");
-            SharedPreferences sharedPref = FitamiBackgroundService.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
             if(currentMeters >= 10){
                 dailyMeters += currentMeters;
                 dailyTime += 15;
             }
-            sharedPref.edit().putFloat(getString(R.string.preference_latitude_key), (float) lastLatitude).apply();
-            sharedPref.edit().putFloat(getString(R.string.preference_longitude_key), (float) lastLongitude).apply();
+            updatePreferenceFloat(R.string.preference_latitude_key, (float) lastLatitude);
+            updatePreferenceFloat(R.string.preference_longitude_key, (float) lastLongitude);
             currentMeters = 0;
-            sharedPref.edit().putLong(getString(R.string.preference_time_key), dailyTime).apply();
-            sharedPref.edit().putLong(getString(R.string.preference_step_key), dailySteps).apply();
-            sharedPref.edit().putLong(getString(R.string.preference_meter_key), dailyMeters).apply();
+            updatePreferenceLong(R.string.preference_time_key, dailyTime);
+            updatePreferenceLong(R.string.preference_step_key, dailySteps);
+            updatePreferenceLong(R.string.preference_meter_key, dailyMeters);
 
-            // Message mainActivity
+            // Message mainActivity - TODO: Encapsulate as a method
             Intent intent = new Intent(String.valueOf(MainActivity.class));
             intent.putExtra("com.trinity.isabelle.fitami.backgroundservice", "Data has been updated!");
             LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(intent);
-            // Repeat
-            handler.postDelayed(this, SENSOR_UPDATE_LATENCY);
+            // ----------------------------------------------------
+
+            handler.postDelayed(this, SENSOR_UPDATE_LATENCY); // Repeat
         }
     };
 
+    // Write data to Firebase
     Runnable firebaseUpdate = new Runnable() {
         @Override
         public void run() {
-            rootRef.child("days").child(currentDate).child(userId).child("activeTime").setValue(dailyTime);
-            rootRef.child("days").child(currentDate).child(userId).child("distance").setValue(dailyMeters);
-            rootRef.child("days").child(currentDate).child(userId).child("steps").setValue(dailySteps);
-            // Repeat
-            handler.postDelayed(this, FIREBASE_UPDATE_LATENCY);
+            updatePreferenceLong(R.string.preference_timestamp_key, getMillis());
+            writeDayDataToFirebase();
+            handler.postDelayed(this, FIREBASE_UPDATE_LATENCY); // Repeat
         }
     };
 
+    // Initialize a new day
     Runnable dateUpdate = new Runnable() {
         @Override
         public void run() {
-            // Write last day's data to Firebase
-            rootRef.child("days").child(currentDate).child(userId).child("activeTime").setValue(dailyTime);
-            rootRef.child("days").child(currentDate).child(userId).child("distance").setValue(dailyMeters);
-            rootRef.child("days").child(currentDate).child(userId).child("steps").setValue(dailySteps);
-            // Initialize data for the new day
-            dailyTime = 0;
-            dailyMeters = 0;
-            dailySteps = 0;
-            currentDate = getToday();
-            lastScore = 0; // TODO: Figure out score calculations
-            SharedPreferences sharedPref = FitamiBackgroundService.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-            sharedPref.edit().putString(getString(R.string.preference_date_key), currentDate).apply();
-            sharedPref.edit().putLong(getString(R.string.preference_time_key), dailyTime).apply();
-            sharedPref.edit().putLong(getString(R.string.preference_step_key), dailySteps).apply();
-            sharedPref.edit().putLong(getString(R.string.preference_meter_key), dailyMeters).apply();
-            sharedPref.edit().putString(getString(R.string.preference_points_key), String.valueOf(lastScore)).apply();
-            // Write new day to Firebase
-            rootRef.child("days").child(getToday()).child(userId).child("nickname").setValue(nickname);
-            rootRef.child("days").child(getToday()).child(userId).child("points").setValue(lastScore);
-            rootRef.child("days").child(getToday()).child(userId).child("activeTime").setValue(0);
-            rootRef.child("days").child(getToday()).child(userId).child("steps").setValue(0);
-            rootRef.child("days").child(getToday()).child(userId).child("distance").setValue(0);
-            // TODO: Set daily medal / challenge / whatever-we-call-this-stuff
-            // Message mainActivity
-            Intent intent = new Intent(String.valueOf(MainActivity.class));
-            intent.putExtra("com.trinity.isabelle.fitami.backgroundservice", "Data has been updated!");
-            LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(intent);
-            // Countdown until next day
-            handler.postDelayed(this, getMillisUntilTomorrow());
+            writePreviousDayDataToFirebase();
+            initializeNewDay();
+            handler.postDelayed(this, getMillisUntilTomorrow());    // Set this to run in a day from now
+        }
+    };
+
+    // Read users/user data from Firebase
+    final ValueEventListener userListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            nickname = String.valueOf(dataSnapshot.child("nickname").getValue(String.class));
+            lastScore = Long.valueOf(dataSnapshot.child("score").getValue(Long.class));
+            updatePreferenceString(R.string.preference_nickname_key, nickname);
+            updatePreferenceLong(R.string.preference_points_key, lastScore);
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("User Listener", "Something went horribly wrong!");
+        }
+    };
+
+    // Read or write data for days/day/user from/to Firebase
+    final ValueEventListener dayUserListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if(Long.valueOf(dataSnapshot.child("timestamp").getValue(Long.class)) >= retrievePreferenceLong(R.string.preference_timestamp_key, 0l)){
+                dailyTime = Long.valueOf(dataSnapshot.child("activeTime").getValue(Long.class));
+                dailyMeters = Long.valueOf(dataSnapshot.child("distance").getValue(Long.class));
+                dailySteps = Long.valueOf(dataSnapshot.child("steps").getValue(Long.class));
+                updatePreferenceLong(R.string.preference_time_key, dailyTime);
+                updatePreferenceLong(R.string.preference_meter_key, dailyMeters);
+                updatePreferenceLong(R.string.preference_step_key, dailySteps);
+                updatePreferenceLong(R.string.preference_timestamp_key, Long.valueOf(dataSnapshot.child("timestamp").getValue(Long.class)));
+            }
+            else {
+                writeDayDataToFirebase();
+            }
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("Day User Listener", "Something went horribly wrong!");
         }
     };
 
@@ -152,89 +142,80 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     // Service startup
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-        lastLatitude = sharedPref.getFloat(getString(R.string.preference_latitude_key), 0.0f);
-        lastLongitude = sharedPref.getFloat(getString(R.string.preference_longitude_key), 0.0f);
-        dailySteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
-        dailyTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
-        dailyMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
-        userId = sharedPref.getString(getString(R.string.preference_uid_key), "00000");
-        nickname = sharedPref.getString(getString(R.string.preference_nickname_key), "undefined");
-        currentDate = sharedPref.getString(getString(R.string.preference_date_key), "19700101");
+        // Initialize shared preferences and firebase variables
+        sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         rootRef = FirebaseDatabase.getInstance().getReference();
-
-        // TODO: Check if GPS is enabled and, if not, inform in main screen before starting this service.
-        // Following code assumes permissions are given and the GPS is on.
-
+        userId = retrievePreferenceString(R.string.preference_uid_key, "00000");                    // This is known
+        nickname = retrievePreferenceString(R.string.preference_nickname_key, "undefined");         // This is known
+        lastScore = retrievePreferenceLong(R.string.preference_points_key, 0l);                   // This is known
+        // Note: If, for some reason, the data above is wrong or not up-to-date, when the data is read from Firebase, it will be updated
+        currentDate = getCurrentDate();
+        // Check if currentDate is different from the date stored in preferences and possibly write to Firebase for the previous one
+        if(currentDate != retrievePreferenceString(R.string.preference_date_key, "19700101")
+                && retrievePreferenceString(R.string.preference_date_key, "19700101") != "19700101"){
+            writePreviousDayDataToFirebase();
+            // After writing to Firebase, initialize the new date data and write a new entry for the date in Firebase
+            initializeNewDay();
+        }
+        // Register listeners that will get data from Firebase
+        rootRef.child("users/" + userId).addValueEventListener(userListener);
+        rootRef.child("days/" + currentDate + "/" + userId).addValueEventListener(dayUserListener);
+        // TODO: Add a listener for the day and all users to get leaderboards
+        // Initialize step counter sensor
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         lastStepCounterNanoTime = System.nanoTime();
         lastStepCounterValue = -1;
         sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
-
+        // Initialize GPS sensor
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        // Generated code to suppress errors
+        lastLatitude = 0.0f;
+        lastLongitude = 0.0f;
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            // return TODO;
+            // TODO: Handle errors from GPS not being enabled - prompt user to enable by messaging MainActivity?
+            Log.e("GPS Error", "The GPS is not enabled!");
         }
         else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 0, this);
         }
-
+        // Start running repeating tasks
         sensorUpdate.run();
         firebaseUpdate.run();
+        // Set date update task to run when the date changes
         final Handler dateHandler = new Handler();
         dateHandler.postDelayed(dateUpdate, getMillisUntilTomorrow());
+        // Call super.onStartCommand()
         return super.onStartCommand(intent, flags, startId);
     }
 
+    // Step counter handling (time is in nanoseconds)
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Handle Step counter
-        // Time is in nanoseconds, thus 15000000000l (that's a lowercase L) is 15s.
-        if(lastStepCounterValue == -1)
-            lastStepCounterValue = (long) event.values[0];
+        if(lastStepCounterValue == -1)  lastStepCounterValue = (long) event.values[0];
         if (Objects.equals(event.sensor.getStringType(), Sensor.STRING_TYPE_STEP_COUNTER)
-                && event.timestamp - lastStepCounterNanoTime >= 15000000000l ) {
+                && event.timestamp - lastStepCounterNanoTime >= SENSOR_UPDATE_LATENCY * 1000000l ) {
             dailySteps += ((long) event.values[0] - lastStepCounterValue);
             lastStepCounterNanoTime = event.timestamp;
             lastStepCounterValue = (long) event.values[0];
         }
-        // Handle other sensors here, if we use any more.
+        // TODO: Handle other sensors here, if we use any more.
     }
 
-
-
+    // GPS handling
     @Override
     public void onLocationChanged(Location location) {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         if(!(lastLongitude == 0.0) && !(lastLatitude == 0.0))
-            currentMeters = calculateDistance(latitude, longitude, lastLatitude, lastLongitude);
+            currentMeters = getDistance(latitude, longitude, lastLatitude, lastLongitude);
         lastLatitude = latitude;
         lastLongitude = longitude;
-        // Geocoder does not currently work as expected
-        /*
-            Geocoder g = new Geocoder(this, Locale.ENGLISH);
-            try {
-                // This does not work as intended, probably an emulator problem from what I've found.
-                String locName = g.getFromLocation(latitude,longitude, 1).get(0).getFeatureName();
-                Log.d("Location", locName);
-            } catch (IOException e) {
-                //e.printStackTrace();  - TODO: Figure out why the Geocoder crashes and how to fix it.
-            }
-        */
+        // TODO: Revisit Geocoder code if, by any chance, it works
     }
 
-    // Helper function off of the internet gets the distance between two points. Very mathy...
-    private static long calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+    // Calculate distance in meters between two locations
+    private long getDistance(double lat1, double lng1, double lat2, double lng2) {
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lng2 - lng1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
@@ -246,8 +227,8 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         return distanceInMeters;
     }
 
-    // Helper function to get milliseconds until midnight
-    private static long getMillisUntilTomorrow(){
+    // Get milliseconds until next day at 00:00
+    private long getMillisUntilTomorrow(){
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, 1);
         c.set(Calendar.HOUR_OF_DAY, 0);
@@ -258,34 +239,108 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         return howMany;
     }
 
-    // Helper function to get the current day in string format
-    public static String getToday(){
+    // Get the textual representation of the current date
+    public String getCurrentDate(){
         return new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+    // Get current time
+    public long getMillis(){
+        return Calendar.getInstance().get(Calendar.MILLISECOND);
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
+    public void initializeNewDay(){
+        currentDate = getCurrentDate();
+        lastStepCounterNanoTime = System.nanoTime();
+        lastStepCounterValue = -1;
+        lastLatitude = 0.0f;
+        lastLongitude = 0.0f;
+        dailyTime = 0l;
+        dailyMeters = 0l;
+        dailySteps = 0l;
+        rootRef.child("days/" + currentDate + "/" + userId + "/nickname").setValue(nickname);
+        rootRef.child("days/" + currentDate + "/" + userId + "/points").setValue(lastScore);
+        rootRef.child("days/" + currentDate + "/" + userId + "/timestamp").setValue(getMillis());
+        rootRef.child("days/" + currentDate + "/" + userId + "/activeTime").setValue(dailyTime);
+        rootRef.child("days/" + currentDate + "/" + userId + "/distance").setValue(dailyMeters);
+        rootRef.child("days/" + currentDate + "/" + userId + "/steps").setValue(dailySteps);
+        // Register new listener
+        rootRef.child("days/" + currentDate + "/" + userId).addValueEventListener(dayUserListener);
+        // TODO: Add a listener for the day and all users to get leaderboards
+        // TODO: Set daily challenge here
     }
 
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
+    // Writes data from a previously stored day to Firebase
+    public void writePreviousDayDataToFirebase(){
+        String previousDate = retrievePreferenceString(R.string.preference_date_key, "19700101");
+        long previousTime = retrievePreferenceLong(R.string.preference_time_key, 0l);
+        long previousMeters = retrievePreferenceLong(R.string.preference_meter_key, 0l);
+        long previousSteps = retrievePreferenceLong(R.string.preference_step_key, 0l);
+        rootRef.child("days/" + previousDate + "/" + userId + "/activeTime").setValue(previousTime);
+        rootRef.child("days/" + previousDate + "/" + userId + "/distance").setValue(previousMeters);
+        rootRef.child("days/" + previousDate + "/" + userId + "/steps").setValue(previousSteps);
+        // Unregister previous listener
+        try {
+            rootRef.child("days/" + previousDate + "/" + userId).removeEventListener(dayUserListener);
+        }
+        catch (Exception e) {
+            Log.e("Writing previous day", "Something went horribly wrong");
+        }
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-
+    // Writes the day data to Firebase
+    public void writeDayDataToFirebase(){
+        rootRef.child("days/" + currentDate + "/" + userId + "/nickname").setValue(nickname);
+        rootRef.child("days/" + currentDate + "/" + userId + "/points").setValue(lastScore);
+        rootRef.child("days/" + currentDate + "/" + userId + "/timestamp").setValue(getMillis());
+        rootRef.child("days/" + currentDate + "/" + userId + "/activeTime").setValue(dailyTime);
+        rootRef.child("days/" + currentDate + "/" + userId + "/distance").setValue(dailyMeters);
+        rootRef.child("days/" + currentDate + "/" + userId + "/steps").setValue(dailySteps);
     }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-
+    // Helper methods for reading and writing to shared preferences (just for visual clarity in the code)
+    public void updatePreferenceInt(int key, int value){
+        sharedPref.edit().putInt(getString(key), value).apply();
     }
+
+    public void updatePreferenceFloat(int key, float value){
+        sharedPref.edit().putFloat(getString(key), value).apply();
+    }
+
+    public void updatePreferenceLong(int key, long value){
+        sharedPref.edit().putLong(getString(key), value).apply();
+    }
+
+    public void updatePreferenceString(int key, String value){
+        sharedPref.edit().putString(getString(key), value).apply();
+    }
+
+    public int retrievePreferenceInt(int key, int defaultValue){
+        return sharedPref.getInt(getString(key), defaultValue);
+    }
+
+    public float retrievePreferenceFloat(int key, float defaultValue){
+        return sharedPref.getFloat(getString(key), defaultValue);
+    }
+
+    public long retrievePreferenceLong(int key, long defaultValue){
+        return sharedPref.getLong(getString(key), defaultValue);
+    }
+
+    public String retrievePreferenceString(int key, String defaultValue){
+        return sharedPref.getString(getString(key), defaultValue);
+    }
+
+    // Misc overrides (required)
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) { }
+    @Override
+    protected void onHandleIntent(Intent intent) { }
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
+    @Override
+    public void onProviderEnabled(String provider) { }
+    @Override
+    public void onProviderDisabled(String provider) { }
 }
 

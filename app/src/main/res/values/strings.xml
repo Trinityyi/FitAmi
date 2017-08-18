@@ -11,6 +11,7 @@
     <string name="preference_date_key">com.trinity.isabelle.fitami.preferences.key.date</string>
     <string name="preference_nickname_key">com.trinity.isabelle.fitami.preferences.key.nickname</string>
     <string name="preference_points_key">com.trinity.isabelle.fitami.preferences.key.points</string>
+    <string name="preference_timestamp_key">com.trinity.isabelle.fitami.preferences.key.timestamp</string>
 
     <string name="title_activity_main">MainActivity</string>
 
