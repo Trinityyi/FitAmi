@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -47,6 +48,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     private long dailyTime, dailySteps, dailyMeters, currentMeters, lastStepCounterNanoTime, lastStepCounterValue, lastScore;
     private double lastLatitude, lastLongitude;
     private String nickname, userId, currentDate;
+    private int dailyMedal;
     private DatabaseReference rootRef;
     private SharedPreferences sharedPref;
 
@@ -64,6 +66,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             updatePreferenceLong(R.string.preference_time_key, dailyTime);
             updatePreferenceLong(R.string.preference_step_key, dailySteps);
             updatePreferenceLong(R.string.preference_meter_key, dailyMeters);
+            checkForMedals();
 
             // Message mainActivity - TODO: Encapsulate as a method
             Intent intent = new Intent(String.valueOf(MainActivity.class));
@@ -103,6 +106,9 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             lastScore = Long.valueOf(dataSnapshot.child("score").getValue(Long.class));
             updatePreferenceString(R.string.preference_nickname_key, nickname);
             updatePreferenceLong(R.string.preference_points_key, lastScore);
+            for(int i = 0; i<24; i++){
+                updatePreferenceIndexedLong(R.string.preference_medal_key, i, Long.valueOf(dataSnapshot.child("medals/"+i).getValue(Long.class)));
+            }
         }
         @Override
         public void onCancelled(DatabaseError databaseError) {
@@ -179,6 +185,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 0, this);
         }
+        dailyMedal = retrievePreferenceInt(R.string.preference_daily_challenge_key, 0);
         // Start running repeating tasks
         sensorUpdate.run();
         firebaseUpdate.run();
@@ -249,6 +256,46 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         return System.currentTimeMillis();
     }
 
+    // Check if user has gotten any medals
+    public void checkForMedals(){
+        // Check steps (medals 0,1,2,3)
+        checkMedal(dailySteps, 5000, 0);
+        checkMedal(dailySteps, 10000, 1);
+        checkMedal(dailySteps, 20000, 2);
+        checkMedal(dailySteps, 25000, 3);
+        // Check meters medals (4,5,6,7)
+        checkMedal(dailyMeters, 5000, 4);
+        checkMedal(dailyMeters, 10000, 5);
+        checkMedal(dailyMeters, 20000, 6);
+        checkMedal(dailyMeters, 25000, 7);
+        // Check time medals (8,9,10,11)
+        checkMedal(dailyTime, 1800, 8);
+        checkMedal(dailyTime, 3600, 9);
+        checkMedal(dailyTime, 5400, 10);
+        checkMedal(dailyTime, 7200, 11);
+    }
+
+    // Check if user has gotten a medal and update preferences and Firebase
+    public void checkMedal(long measurement, long threshold, int index){
+        if(measurement >= threshold
+                && retrievePreferenceIndexedLong(R.string.preference_daily_medal_key, index, 0l) < 1
+                && retrievePreferenceIndexedLong(R.string.preference_daily_medal_key, index + 12, 0l) < 1){
+            // Update medal (not daily challenge)
+            if(dailyMedal != index) {
+                updatePreferenceIndexedLong(R.string.preference_daily_medal_key, index, 1);
+                updatePreferenceIndexedLong(R.string.preference_medal_key, index, retrievePreferenceIndexedLong(R.string.preference_medal_key, index, 0l) + 1);
+                rootRef.child("users/" + userId + "/medals/" + index).setValue(retrievePreferenceIndexedLong(R.string.preference_medal_key, index, 0l));
+            }
+            // Update medal (daily challenge)
+            else {
+                updatePreferenceIndexedLong(R.string.preference_daily_medal_key, index + 12, 1);
+                updatePreferenceIndexedLong(R.string.preference_medal_key, index + 12, retrievePreferenceIndexedLong(R.string.preference_medal_key, index + 12, 0l) + 1);
+                rootRef.child("users/" + userId + "/medals/" + (index + 12)).setValue(retrievePreferenceIndexedLong(R.string.preference_medal_key, index + 12, 0l));
+            }
+        }
+    }
+
+    // Initialize a new day and write it to Firebase
     public void initializeNewDay(){
         currentDate = getCurrentDate();
         lastStepCounterNanoTime = System.nanoTime();
@@ -266,8 +313,13 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         rootRef.child("days/" + currentDate + "/" + userId + "/steps").setValue(dailySteps);
         // Register new listener
         rootRef.child("days/" + currentDate + "/" + userId).addValueEventListener(dayUserListener);
+        // Set daily challenge, cleanup daily medals
+        dailyMedal = new Random().nextInt(12);
+        updatePreferenceInt(R.string.preference_daily_challenge_key, dailyMedal);
+        for (int i = 0; i<24; i++){
+            updatePreferenceIndexedLong(R.string.preference_daily_medal_key, i, 0);
+        }
         // TODO: Add a listener for the day and all users to get leaderboards
-        // TODO: Set daily challenge here
     }
 
     // Writes data from a previously stored day to Firebase
@@ -311,6 +363,10 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         sharedPref.edit().putLong(getString(key), value).apply();
     }
 
+    public void updatePreferenceIndexedLong(int key, int index, long value){
+        sharedPref.edit().putLong(getString(key)+index, value).apply();
+    }
+
     public void updatePreferenceString(int key, String value){
         sharedPref.edit().putString(getString(key), value).apply();
     }
@@ -325,6 +381,10 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
 
     public long retrievePreferenceLong(int key, long defaultValue){
         return sharedPref.getLong(getString(key), defaultValue);
+    }
+
+    public long retrievePreferenceIndexedLong(int key, int index, long defaultValue){
+        return sharedPref.getLong(getString(key) + index, defaultValue);
     }
 
     public String retrievePreferenceString(int key, String defaultValue){
