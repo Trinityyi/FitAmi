@@ -246,7 +246,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
 
     // Get current time
     public long getMillis(){
-        return Calendar.getInstance().get(Calendar.MILLISECOND);
+        return System.currentTimeMillis();
     }
 
     public void initializeNewDay(){
