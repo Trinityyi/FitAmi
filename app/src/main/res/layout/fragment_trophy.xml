@@ -5,9 +5,166 @@
     tools:context="com.trinity.isabelle.fitami.TrophyFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/distanceMedals"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/stepsMedals">
+
+            <RelativeLayout
+                android:id="@+id/distance25000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:layout_toRightOf="@+id/distance20000"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/distance20000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:layout_toRightOf="@+id/distance10000"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/distance10000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:layout_marginLeft="100dp"
+                android:layout_toRightOf="@+id/distance5000"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/distance5000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/stepsMedals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/steps25000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:layout_toRightOf="@+id/distance20000"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/distance20000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:layout_toRightOf="@+id/distance10000"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/distance10000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:layout_marginLeft="100dp"
+                android:layout_toRightOf="@+id/distance5000"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/distance5000"
+                android:layout_width="96dp"
+                android:layout_height="100dp"
+                android:layout_margin="0dp"
+                android:background="@mipmap/medal_with_star">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="5000 steps"
+                    android:textSize="10sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 
 </FrameLayout>
