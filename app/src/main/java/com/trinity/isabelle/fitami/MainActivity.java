@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -34,6 +36,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private long lastTime,lastSteps,lastMeters;
 
     // Broadcast Receiver for getting messages from background service
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -42,13 +45,22 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
             float lastLatitude = sharedPref.getFloat(getString(R.string.preference_latitude_key), 0.0f);
             float lastLongitude = sharedPref.getFloat(getString(R.string.preference_longitude_key), 0.0f);
-            long lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
-            long  lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
-            long lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+            lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
+            lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
+            lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
             // TODO: Maybe we should turn this into a string resource.
             Log.d("Received ", intent.getStringExtra("com.trinity.isabelle.fitami.backgroundservice"));
             TextView logger = (TextView) findViewById(R.id.logger);
             logger.setText("Location: "+lastLatitude+" , "+lastLongitude+" - Time: "+lastTime+" - Steps: "+lastSteps+" - Meters: "+lastMeters);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+            recyclerView.setHasFixedSize(true);
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+            recyclerView.setLayoutManager(layoutManager);
+
+
+            RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
+            recyclerView.setAdapter(adapter);
         }
     };
 
@@ -73,6 +85,16 @@ public class MainActivity extends AppCompatActivity
         // Start the background service
         Intent backgroundService = new Intent(this, FitamiBackgroundService.class);
         startService(backgroundService);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+        RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -111,12 +133,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 

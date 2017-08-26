@@ -150,7 +150,12 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         // Initialize shared preferences and firebase variables
         sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        try {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }
+        catch (Exception e){
+            Log.e("Firebase persistence", "Cannot set persistence");
+        }
         rootRef = FirebaseDatabase.getInstance().getReference();
         userId = retrievePreferenceString(R.string.preference_uid_key, "00000");                    // This is known
         nickname = retrievePreferenceString(R.string.preference_nickname_key, "undefined");         // This is known
@@ -158,8 +163,8 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         // Note: If, for some reason, the data above is wrong or not up-to-date, when the data is read from Firebase, it will be updated
         currentDate = getCurrentDate();
         // Check if currentDate is different from the date stored in preferences and possibly write to Firebase for the previous one
-        if(currentDate != retrievePreferenceString(R.string.preference_date_key, "19700101")
-                && retrievePreferenceString(R.string.preference_date_key, "19700101") != "19700101"){
+        if(!Objects.equals(currentDate, retrievePreferenceString(R.string.preference_date_key, "19700101"))
+                && !Objects.equals(retrievePreferenceString(R.string.preference_date_key, "19700101"), "19700101")){
             writePreviousDayDataToFirebase();
             // After writing to Firebase, initialize the new date data and write a new entry for the date in Firebase
             initializeNewDay();

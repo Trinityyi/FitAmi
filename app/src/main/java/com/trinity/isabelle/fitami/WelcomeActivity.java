@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +27,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private int[] layouts;
     private Button btnNext;
-    TextView editGender, editBirth, editWeight, editHeight;
+    Spinner spinnerGender;
+    EditText editNickname;
+    TextView editBirth, editWeight, editHeight;
     DatabaseReference rootRef,userRef;
     final Context c = this;
 
@@ -84,13 +88,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void launchTutorialScreen() {
         // Save data
-        //String gender = editGender.getText().toString();
+        String nickname = editNickname.getText().toString();
+        String gender = String.valueOf(spinnerGender.getSelectedItem());
         String dateOfBirth = editBirth.getText().toString();
         String height = editHeight.getText().toString();
         String weight = editWeight.getText().toString();
 
         //push creates a unique id in database
-        //userRef.child("gender").setValue(gender);
+        userRef.child("nickname").setValue(nickname);
+        userRef.child("gender").setValue(gender);
         userRef.child("dateOfBirth").setValue(dateOfBirth);
         userRef.child("height").setValue(height);
         userRef.child("weight").setValue(weight);
@@ -107,9 +113,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
         @Override
         public void onPageSelected(int position) {
-            // changing the next button text 'NEXT' / 'GOT IT'
+            // changing the next button text 'NEXT' / 'START'
             if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
+                // last page. make button text to START
                 btnNext.setText(getString(R.string.start));
 
             }
@@ -148,6 +154,9 @@ public class WelcomeActivity extends AppCompatActivity {
             container.addView(view);
 
             if (position==layouts.length-1){
+//                TODO: Check if null, show toast message
+                editNickname = (EditText) view.findViewById(R.id.editNickname);
+                spinnerGender = (Spinner) view.findViewById(R.id.spinnerGender);
                 editBirth = (TextView) view.findViewById(R.id.editBirth);
                 editHeight = (TextView) view.findViewById(R.id.editHeight);
                 editWeight = (TextView) view.findViewById(R.id.editWeight);

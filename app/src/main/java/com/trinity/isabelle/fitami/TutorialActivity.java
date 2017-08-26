@@ -108,6 +108,7 @@ public class TutorialActivity extends AppCompatActivity {
         prefManager.setFirstTimeLaunch(false);
         startActivity(new Intent(TutorialActivity.this, MainActivity.class));
         finish();
+
     }
 
     //  viewpager change listener
