@@ -121,6 +121,9 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     final ValueEventListener dayUserListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
+            // Edge-case handling, if there is no data yet
+            if(dataSnapshot.child("timestamp").getValue() == null)
+                return;
             if(Long.valueOf(dataSnapshot.child("timestamp").getValue(Long.class)) >= retrievePreferenceLong(R.string.preference_timestamp_key, 0l)){
                 dailyTime = Long.valueOf(dataSnapshot.child("activeTime").getValue(Long.class));
                 dailyMeters = Long.valueOf(dataSnapshot.child("distance").getValue(Long.class));
@@ -143,6 +146,12 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     final ValueEventListener dayUserInitialListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
+            // Edge-case handling, if there is no data yet
+            if(dataSnapshot.child("timestamp").getValue() == null) {
+                // Start running repeating tasks
+                firebaseUpdate.run();
+                return;
+            }
             if(Long.valueOf(dataSnapshot.child("timestamp").getValue(Long.class)) >= retrievePreferenceLong(R.string.preference_timestamp_key, 0l)){
                 dailyTime = Long.valueOf(dataSnapshot.child("activeTime").getValue(Long.class));
                 dailyMeters = Long.valueOf(dataSnapshot.child("distance").getValue(Long.class));
@@ -344,9 +353,9 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         dailyTime = 0l;
         dailyMeters = 0l;
         dailySteps = 0l;
+        rootRef.child("days/" + currentDate + "/" + userId + "/timestamp").setValue(getMillis());
         rootRef.child("days/" + currentDate + "/" + userId + "/nickname").setValue(nickname);
         rootRef.child("days/" + currentDate + "/" + userId + "/points").setValue(lastScore);
-        rootRef.child("days/" + currentDate + "/" + userId + "/timestamp").setValue(getMillis());
         rootRef.child("days/" + currentDate + "/" + userId + "/activeTime").setValue(dailyTime);
         rootRef.child("days/" + currentDate + "/" + userId + "/distance").setValue(dailyMeters);
         rootRef.child("days/" + currentDate + "/" + userId + "/steps").setValue(dailySteps);
