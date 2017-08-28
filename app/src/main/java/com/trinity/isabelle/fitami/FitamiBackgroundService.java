@@ -46,6 +46,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     private double lastLatitude, lastLongitude;
     private String nickname, userId, currentDate;
     private int dailyMedal;
+    private boolean lastStepIndicator;
     private DatabaseReference rootRef;
     private SharedPreferences sharedPref;
 
@@ -56,9 +57,8 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             if(currentMeters >= 10){
                 dailyMeters += currentMeters;
                 dailyTime += 15;
-                // In case the step counter doesn't work (and it tends to), calculate steps by approximation
-                if (dailySteps == 0) {
-                    dailySteps = Math.round(dailyMeters * 1.31233595800525);
+                if (lastStepIndicator == false) {
+                    dailySteps += Math.round(currentMeters * 1.3123359580052);
                 }
             }
             updatePreferenceFloat(R.string.preference_latitude_key, (float) lastLatitude);
@@ -205,6 +205,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         Sensor stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         lastStepCounterNanoTime = System.nanoTime();
         lastStepCounterValue = -1;
+        lastStepIndicator = false;
         sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
         // Initialize GPS sensor
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -239,6 +240,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             dailySteps += ((long) event.values[0] - lastStepCounterValue);
             lastStepCounterNanoTime = event.timestamp;
             lastStepCounterValue = (long) event.values[0];
+            lastStepIndicator = true;
         }
         // Handle other sensors here, if we use any more.
     }
