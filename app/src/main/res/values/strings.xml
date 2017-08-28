@@ -20,10 +20,27 @@
 
     <string name="title_activity_main">MainActivity</string>
 
-    // Drawer
+    <!-- Navigation Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
     <string name="action_settings">Settings</string>
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">Home</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_trophy">Trophy Room</string>
+    <string name="nav_leaderboard">Leaderboard</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Profile</item>
+        <item>Trophy Room</item>
+        <item>Leaderboard</item>
+    </string-array>
 
     // SLIDE
     <string name="next">NEXT</string>

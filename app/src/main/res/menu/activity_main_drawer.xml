@@ -3,15 +3,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/nav_home" />
+        <item
+            android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="Profile" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_trophy"
             android:icon="@drawable/ic_medal"
             android:title="Trophy Room" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_leaderboard"
             android:icon="@drawable/ic_leaderboard"
             android:title="Leaderboard" />
     </group>
