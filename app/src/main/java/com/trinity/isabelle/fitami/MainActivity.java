@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,22 +45,25 @@ public class MainActivity extends AppCompatActivity
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-            float lastLatitude = sharedPref.getFloat(getString(R.string.preference_latitude_key), 0.0f);
-            float lastLongitude = sharedPref.getFloat(getString(R.string.preference_longitude_key), 0.0f);
-            lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
-            lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
-            lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
-            // TODO: Maybe we should turn this into a string resource.
-            Log.d("Received ", intent.getStringExtra("com.trinity.isabelle.fitami.backgroundservice"));
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-            recyclerView.setHasFixedSize(true);
-
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-            recyclerView.setLayoutManager(layoutManager);
-
-            RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
-            recyclerView.setAdapter(adapter);
+            String messageReceived = intent.getStringExtra(String.valueOf(R.string.intent_service_string_extra));
+            Log.d("Received ", messageReceived);
+            // If the broadcast was about the GPS not being enabled, deal with it
+            if(Objects.equals(messageReceived, "The GPS is not enabled!"))  {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION}, 7431);
+            }
+            else {
+                SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+                float lastLatitude = sharedPref.getFloat(getString(R.string.preference_latitude_key), 0.0f);
+                float lastLongitude = sharedPref.getFloat(getString(R.string.preference_longitude_key), 0.0f);
+                lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
+                lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
+                lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+                RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
+                recyclerView.setAdapter(adapter);
+            }
         }
     };
 
@@ -83,12 +89,17 @@ public class MainActivity extends AppCompatActivity
         Intent backgroundService = new Intent(this, FitamiBackgroundService.class);
         startService(backgroundService);
 
+        // Get the data from shared preferences to write on the card
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+        lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
+        lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
+        lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
 
         RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
         recyclerView.setAdapter(adapter);
@@ -101,6 +112,19 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    // Deal with permissions for GPS being given or not
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 7431:
+                if (! (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION}, 7431);
+                }
         }
     }
 

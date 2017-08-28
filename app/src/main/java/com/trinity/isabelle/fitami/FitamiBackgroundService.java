@@ -36,9 +36,6 @@ import java.util.Random;
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
  */
 public class FitamiBackgroundService extends IntentService implements SensorEventListener, LocationListener {
 
@@ -59,6 +56,10 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             if(currentMeters >= 10){
                 dailyMeters += currentMeters;
                 dailyTime += 15;
+                // In case the step counter doesn't work (and it tends to), calculate steps by approximation
+                if (dailySteps == 0) {
+                    dailySteps = Math.round(dailyMeters * 1.31233595800525);
+                }
             }
             updatePreferenceFloat(R.string.preference_latitude_key, (float) lastLatitude);
             updatePreferenceFloat(R.string.preference_longitude_key, (float) lastLongitude);
@@ -70,7 +71,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
 
             // Message mainActivity - TODO: Encapsulate as a method
             Intent intent = new Intent(String.valueOf(MainActivity.class));
-            intent.putExtra("com.trinity.isabelle.fitami.backgroundservice", "Data has been updated!");
+            intent.putExtra(String.valueOf(R.string.intent_service_string_extra), "Data has been updated!");
             LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(intent);
             // ----------------------------------------------------
 
@@ -210,8 +211,11 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         lastLatitude = 0.0f;
         lastLongitude = 0.0f;
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Handle errors from GPS not being enabled - prompt user to enable by messaging MainActivity?
+            // Handle errors from GPS not being enabled - prompt user to enable by messaging MainActivity
             Log.e("GPS Error", "The GPS is not enabled!");
+            Intent mainIntent = new Intent(String.valueOf(MainActivity.class));
+            mainIntent.putExtra(String.valueOf(R.string.intent_service_string_extra), "The GPS is not enabled!");
+            LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(mainIntent);
         }
         else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 0, this);
@@ -236,7 +240,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             lastStepCounterNanoTime = event.timestamp;
             lastStepCounterValue = (long) event.values[0];
         }
-        // TODO: Handle other sensors here, if we use any more.
+        // Handle other sensors here, if we use any more.
     }
 
     // GPS handling
@@ -248,7 +252,6 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             currentMeters = getDistance(latitude, longitude, lastLatitude, lastLongitude);
         lastLatitude = latitude;
         lastLongitude = longitude;
-        // TODO: Revisit Geocoder code if, by any chance, it works
     }
 
     // Calculate distance in meters between two locations

@@ -16,6 +16,8 @@
     <string name="preference_daily_medal_key">com.trinity.isabelle.fitami.preferences.key.medal.daily</string>
     <string name="preference_daily_challenge_key">com.trinity.isabelle.fitami.preferences.key.challenge</string>
 
+    <string name="intent_service_string_extra">com.trinity.isabelle.fitami.backgroundservice</string>
+
     <string name="title_activity_main">MainActivity</string>
 
     // Drawer
@@ -38,7 +40,6 @@
         <item>Female</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

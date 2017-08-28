@@ -154,7 +154,7 @@ public class WelcomeActivity extends AppCompatActivity {
             container.addView(view);
 
             if (position==layouts.length-1){
-//                TODO: Check if null, show toast message
+                // TODO: Check if null, show toast message
                 editNickname = (EditText) view.findViewById(R.id.editNickname);
                 spinnerGender = (Spinner) view.findViewById(R.id.spinnerGender);
                 editBirth = (TextView) view.findViewById(R.id.editBirth);
@@ -175,7 +175,6 @@ public class WelcomeActivity extends AppCompatActivity {
                                 .setCancelable(false)
                                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
-                                        // ToDo get user input here
                                         String content = month.getValue()+"/"+year.getValue(); //gets you the contents of edit text
                                         editBirth.setText(content); //displays it in a textview..
                                     }
@@ -214,7 +213,6 @@ public class WelcomeActivity extends AppCompatActivity {
                                 .setCancelable(false)
                                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
-                                        // ToDo get user input here
                                         String content = cm.getValue()+" cm"; //gets you the contents of edit text
                                         editHeight.setText(content); //displays it in a textview..
                                     }
@@ -251,7 +249,6 @@ public class WelcomeActivity extends AppCompatActivity {
                                 .setCancelable(false)
                                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
-                                        // ToDo get user input here
                                         String content = kilo.getValue()+"."+gram.getValue()+" kg"; //gets you the contents of edit text
                                         editWeight.setText(content); //displays it in a textview..
                                     }
