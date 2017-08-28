@@ -1,4 +1,4 @@
-package com.trinity.isabelle.fitami;
+package com.trinity.isabelle.fitami.Other;
 
 import android.content.Context;
 import android.content.SharedPreferences;

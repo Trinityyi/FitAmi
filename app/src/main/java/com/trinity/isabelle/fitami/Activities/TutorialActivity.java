@@ -1,4 +1,4 @@
-package com.trinity.isabelle.fitami;
+package com.trinity.isabelle.fitami.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.trinity.isabelle.fitami.Other.PrefManager;
+import com.trinity.isabelle.fitami.R;
 
 
 public class TutorialActivity extends AppCompatActivity {

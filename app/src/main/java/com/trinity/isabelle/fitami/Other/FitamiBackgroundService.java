@@ -1,4 +1,4 @@
-package com.trinity.isabelle.fitami;
+package com.trinity.isabelle.fitami.Other;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,11 +24,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.trinity.isabelle.fitami.Activities.MainActivity;
+import com.trinity.isabelle.fitami.R;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 

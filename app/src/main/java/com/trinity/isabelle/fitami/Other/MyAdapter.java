@@ -1,4 +1,4 @@
-package com.trinity.isabelle.fitami;
+package com.trinity.isabelle.fitami.Other;
 
 
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.trinity.isabelle.fitami.R;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 

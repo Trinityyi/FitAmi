@@ -1,4 +1,4 @@
-package com.trinity.isabelle.fitami;
+package com.trinity.isabelle.fitami.Activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import com.trinity.isabelle.fitami.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

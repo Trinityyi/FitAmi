@@ -1,9 +1,8 @@
-package com.trinity.isabelle.fitami;
+package com.trinity.isabelle.fitami.Activities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -12,9 +11,6 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,18 +21,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.trinity.isabelle.fitami.Fragments.HomeFragment;
+import com.trinity.isabelle.fitami.Fragments.LeaderboardFragment;
+import com.trinity.isabelle.fitami.Fragments.ProfileFragment;
+import com.trinity.isabelle.fitami.Fragments.TrophyFragment;
+import com.trinity.isabelle.fitami.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
