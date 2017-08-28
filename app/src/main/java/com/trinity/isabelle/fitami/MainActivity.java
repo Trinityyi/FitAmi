@@ -50,8 +50,6 @@ public class MainActivity extends AppCompatActivity
             lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
             // TODO: Maybe we should turn this into a string resource.
             Log.d("Received ", intent.getStringExtra("com.trinity.isabelle.fitami.backgroundservice"));
-            TextView logger = (TextView) findViewById(R.id.logger);
-            logger.setText("Location: "+lastLatitude+" , "+lastLongitude+" - Time: "+lastTime+" - Steps: "+lastSteps+" - Meters: "+lastMeters);
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
             recyclerView.setHasFixedSize(true);
 

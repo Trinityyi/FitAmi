@@ -139,6 +139,30 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         }
     };
 
+    final ValueEventListener dayUserInitialListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if(Long.valueOf(dataSnapshot.child("timestamp").getValue(Long.class)) >= retrievePreferenceLong(R.string.preference_timestamp_key, 0l)){
+                dailyTime = Long.valueOf(dataSnapshot.child("activeTime").getValue(Long.class));
+                dailyMeters = Long.valueOf(dataSnapshot.child("distance").getValue(Long.class));
+                dailySteps = Long.valueOf(dataSnapshot.child("steps").getValue(Long.class));
+                updatePreferenceLong(R.string.preference_time_key, dailyTime);
+                updatePreferenceLong(R.string.preference_meter_key, dailyMeters);
+                updatePreferenceLong(R.string.preference_step_key, dailySteps);
+                updatePreferenceLong(R.string.preference_timestamp_key, Long.valueOf(dataSnapshot.child("timestamp").getValue(Long.class)));
+            }
+            else {
+                writeDayDataToFirebase();
+            }
+            // Start running repeating tasks
+            firebaseUpdate.run();
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("Day User Listener", "Something went horribly wrong!");
+        }
+    };
+
 
     // Constructor
     public FitamiBackgroundService() {
@@ -148,6 +172,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     // Service startup
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        Log.d("Random", ""+dailyMedal);
         // Initialize shared preferences and firebase variables
         sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
         try {
@@ -170,6 +195,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             initializeNewDay();
         }
         // Register listeners that will get data from Firebase
+        rootRef.child("days/" + currentDate + "/" + userId).addListenerForSingleValueEvent(dayUserInitialListener);
         rootRef.child("users/" + userId).addValueEventListener(userListener);
         rootRef.child("days/" + currentDate + "/" + userId).addValueEventListener(dayUserListener);
         // TODO: Add a listener for the day and all users to get leaderboards
@@ -193,7 +219,6 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         dailyMedal = retrievePreferenceInt(R.string.preference_daily_challenge_key, 0);
         // Start running repeating tasks
         sensorUpdate.run();
-        firebaseUpdate.run();
         // Set date update task to run when the date changes
         final Handler dateHandler = new Handler();
         dateHandler.postDelayed(dateUpdate, getMillisUntilTomorrow());
@@ -264,38 +289,42 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     // Check if user has gotten any medals
     public void checkForMedals(){
         // Check steps (medals 0,1,2,3)
-        checkMedal(dailySteps, 5000, 0);
-        checkMedal(dailySteps, 10000, 1);
-        checkMedal(dailySteps, 20000, 2);
-        checkMedal(dailySteps, 25000, 3);
+        checkMedal(dailySteps, 5000, 0, 5);
+        checkMedal(dailySteps, 10000, 1, 10);
+        checkMedal(dailySteps, 20000, 2, 15);
+        checkMedal(dailySteps, 25000, 3, 20);
         // Check meters medals (4,5,6,7)
-        checkMedal(dailyMeters, 5000, 4);
-        checkMedal(dailyMeters, 10000, 5);
-        checkMedal(dailyMeters, 20000, 6);
-        checkMedal(dailyMeters, 25000, 7);
+        checkMedal(dailyMeters, 5000, 4, 5);
+        checkMedal(dailyMeters, 10000, 5, 10);
+        checkMedal(dailyMeters, 20000, 6, 15);
+        checkMedal(dailyMeters, 25000, 7, 20);
         // Check time medals (8,9,10,11)
-        checkMedal(dailyTime, 1800, 8);
-        checkMedal(dailyTime, 3600, 9);
-        checkMedal(dailyTime, 5400, 10);
-        checkMedal(dailyTime, 7200, 11);
+        checkMedal(dailyTime, 1800, 8, 5);
+        checkMedal(dailyTime, 3600, 9, 10);
+        checkMedal(dailyTime, 5400, 10, 15);
+        checkMedal(dailyTime, 7200, 11, 20);
     }
 
     // Check if user has gotten a medal and update preferences and Firebase
-    public void checkMedal(long measurement, long threshold, int index){
+    public void checkMedal(long measurement, long threshold, int index, long pointValue){
         if(measurement >= threshold
                 && retrievePreferenceIndexedLong(R.string.preference_daily_medal_key, index, 0l) < 1
                 && retrievePreferenceIndexedLong(R.string.preference_daily_medal_key, index + 12, 0l) < 1){
-            // Update medal (not daily challenge)
+            // Update medal (not daily challenge) and score
             if(dailyMedal != index) {
                 updatePreferenceIndexedLong(R.string.preference_daily_medal_key, index, 1);
                 updatePreferenceIndexedLong(R.string.preference_medal_key, index, retrievePreferenceIndexedLong(R.string.preference_medal_key, index, 0l) + 1);
                 rootRef.child("users/" + userId + "/medals/" + index).setValue(retrievePreferenceIndexedLong(R.string.preference_medal_key, index, 0l));
+                updatePreferenceLong(R.string.preference_points_key, retrievePreferenceLong(R.string.preference_points_key, lastScore) + pointValue);
+                rootRef.child("users/" + userId + "/score").setValue(retrievePreferenceLong(R.string.preference_points_key, lastScore));
             }
-            // Update medal (daily challenge)
+            // Update medal (daily challenge) and score
             else {
                 updatePreferenceIndexedLong(R.string.preference_daily_medal_key, index + 12, 1);
                 updatePreferenceIndexedLong(R.string.preference_medal_key, index + 12, retrievePreferenceIndexedLong(R.string.preference_medal_key, index + 12, 0l) + 1);
                 rootRef.child("users/" + userId + "/medals/" + (index + 12)).setValue(retrievePreferenceIndexedLong(R.string.preference_medal_key, index + 12, 0l));
+                updatePreferenceLong(R.string.preference_points_key, retrievePreferenceLong(R.string.preference_points_key, lastScore) + 25);
+                rootRef.child("users/" + userId + "/score").setValue(retrievePreferenceLong(R.string.preference_points_key, lastScore));
             }
         }
     }
