@@ -1,18 +1,25 @@
 package com.trinity.isabelle.fitami.Fragments;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.trinity.isabelle.fitami.Other.MyAdapter;
 import com.trinity.isabelle.fitami.R;
+
+import java.util.Objects;
 
 
 /**
@@ -42,6 +49,30 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
+
+    // Broadcast Receiver for getting messages from background service
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String messageReceived = intent.getStringExtra(String.valueOf(R.string.intent_service_string_extra));
+            Log.d("Received ", messageReceived);
+            // If the broadcast was about the GPS not being enabled, deal with it
+            if(Objects.equals(messageReceived, "The GPS is not enabled!"))  {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION}, 7431);
+            }
+            else {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+                lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
+                lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
+                lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+                recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerView);
+                RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
+                recyclerView.setAdapter(adapter);
+            }
+        }
+    };
 
     /**
      * Use this factory method to create a new instance of
@@ -77,7 +108,10 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.setTag(TAG);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        // Register broadcast receiver for messages from the background service
+        //LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter(String.valueOf(MainActivity.class)));
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -108,7 +142,8 @@ public class HomeFragment extends Fragment {
 //        super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
-//        } else {
+//        }
+//      else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }

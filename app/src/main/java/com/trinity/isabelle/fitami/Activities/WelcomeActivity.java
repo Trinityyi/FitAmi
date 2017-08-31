@@ -53,7 +53,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //database reference pointing to root of database
         rootRef = FirebaseDatabase.getInstance().getReference();

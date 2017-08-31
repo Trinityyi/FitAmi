@@ -3,6 +3,7 @@ package com.trinity.isabelle.fitami.Activities;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,6 +29,7 @@ import com.trinity.isabelle.fitami.Fragments.HomeFragment;
 import com.trinity.isabelle.fitami.Fragments.LeaderboardFragment;
 import com.trinity.isabelle.fitami.Fragments.ProfileFragment;
 import com.trinity.isabelle.fitami.Fragments.TrophyFragment;
+import com.trinity.isabelle.fitami.Other.FitamiBackgroundService;
 import com.trinity.isabelle.fitami.R;
 
 import java.util.Objects;
@@ -34,6 +37,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private long lastTime,lastSteps,lastMeters;
+    private String userNickname;
 
     private NavigationView navigationView;
     private Toolbar toolbar;
@@ -77,9 +81,7 @@ public class MainActivity extends AppCompatActivity
                 lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
                 lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
                 lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
-//                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-//                RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
-//                recyclerView.setAdapter(adapter);
+                userNickname = sharedPref.getString(getString(R.string.preference_nickname_key),"undefined");
             }
         }
     };
@@ -111,20 +113,26 @@ public class MainActivity extends AppCompatActivity
         // initializing navigation menu
         setUpNavigationView();
 
+        // Register broadcast receiver for messages from the background service
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(String.valueOf(MainActivity.class)));
+
+        // Start the background service
+        Intent backgroundService = new Intent(this, FitamiBackgroundService.class);
+        startService(backgroundService);
+
         if (savedInstanceState == null) {
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
     }
 
     /***
      * Load navigation menu header information
-     * like background image, profile image
-     * name, website, notifications action view (dot)
      */
     private void loadNavHeader() {
-        // name, website
+        // name, email
         txtName.setText("Test Test");
         txtEmail.setText("test@email.com");
     }
@@ -217,7 +225,7 @@ public class MainActivity extends AppCompatActivity
 
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    //Replacing the main content with selected fragment;
                     case R.id.nav_home:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
