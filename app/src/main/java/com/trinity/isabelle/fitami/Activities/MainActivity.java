@@ -29,6 +29,7 @@ import com.trinity.isabelle.fitami.Fragments.HomeFragment;
 import com.trinity.isabelle.fitami.Fragments.LeaderboardFragment;
 import com.trinity.isabelle.fitami.Fragments.ProfileFragment;
 import com.trinity.isabelle.fitami.Fragments.TrophyFragment;
+import com.trinity.isabelle.fitami.Other.DataFragment;
 import com.trinity.isabelle.fitami.Other.FitamiBackgroundService;
 import com.trinity.isabelle.fitami.R;
 
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity
                 lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
                 lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
                 lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+                //getHomeFragment().setFragmentData();
+                if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+                    ((DataFragment)getSupportFragmentManager().findFragmentByTag(CURRENT_TAG)).setFragmentData();
+                }
             }
         }
     };
@@ -176,6 +181,7 @@ public class MainActivity extends AppCompatActivity
         if (mPendingRunnable != null) {
             mHandler.post(mPendingRunnable);
         }
+
 
         //Closing drawer on item click
         drawer.closeDrawers();

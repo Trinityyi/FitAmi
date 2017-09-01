@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import com.trinity.isabelle.fitami.Other.RecycleViewAdapter;
 import com.trinity.isabelle.fitami.R;
+import com.trinity.isabelle.fitami.Other.DataFragment;
 
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ import java.util.Objects;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends DataFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,31 +56,6 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
-
-    // Broadcast Receiver for getting messages from background service
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String messageReceived = intent.getStringExtra(String.valueOf(R.string.intent_service_string_extra));
-            Log.d("Received ", messageReceived);
-            // If the broadcast was about the GPS not being enabled, deal with it
-            if(Objects.equals(messageReceived, "The GPS is not enabled!"))  {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION}, 7431);
-            }
-            else {
-                sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-                lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
-                lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
-                lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
-
-                recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerView);
-                RecyclerView.Adapter adapter = new RecycleViewAdapter(lastSteps, lastMeters, lastTime, top3Leaderboard);
-                recyclerView.setAdapter(adapter);
-            }
-        }
-    };
 
     /**
      * Use this factory method to create a new instance of
@@ -106,6 +82,7 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setFragmentData();
     }
 
     @Override
@@ -114,13 +91,6 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.setTag(TAG);
-
-        // Register broadcast receiver for messages from the background service
-        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(String.valueOf(HomeFragment.class)));
-//
-//        // Start the background service
-//        Intent backgroundService = new Intent(getActivity(), FitamiBackgroundService.class);
-//        getActivity().startService(backgroundService);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -138,6 +108,18 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    public void setFragmentData(){
+        if(!isAdded())  return;
+        // Get the data from shared preferences to write on the card
+        sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+        lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
+        lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
+        lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+
+        RecyclerView.Adapter adapter = new RecycleViewAdapter(lastSteps, lastMeters, lastTime, top3Leaderboard);
+        recyclerView.setAdapter(adapter);
     }
 
 

@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import com.trinity.isabelle.fitami.Other.LeaderboardAdaper;
 import com.trinity.isabelle.fitami.R;
+import com.trinity.isabelle.fitami.Other.DataFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
  * Use the {@link LeaderboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LeaderboardFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class LeaderboardFragment extends DataFragment implements AdapterView.OnItemSelectedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -236,6 +237,10 @@ public class LeaderboardFragment extends Fragment implements AdapterView.OnItemS
         leaderboardEntityList.add(leaderboard8);
 
         return leaderboardEntityList;
+    }
+
+    public void setFragmentData(){
+        // TODO
     }
 
     @Override

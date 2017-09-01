@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trinity.isabelle.fitami.R;
+import com.trinity.isabelle.fitami.Other.DataFragment;
 
 
 /**
@@ -33,7 +34,7 @@ import com.trinity.isabelle.fitami.R;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends DataFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -268,6 +269,10 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void setFragmentData(){
+        // TODO
     }
 
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.trinity.isabelle.fitami.R;
+import com.trinity.isabelle.fitami.Other.DataFragment;
 
 
 /**
@@ -19,7 +20,7 @@ import com.trinity.isabelle.fitami.R;
  * Use the {@link TrophyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrophyFragment extends Fragment {
+public class TrophyFragment extends DataFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -82,6 +83,10 @@ public class TrophyFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void setFragmentData(){
+        // TODO
     }
 
     @Override
