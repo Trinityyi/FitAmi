@@ -4,11 +4,13 @@ import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.trinity.isabelle.fitami.Other.MyAdapter;
+import com.trinity.isabelle.fitami.Other.RecycleViewAdapter;
 import com.trinity.isabelle.fitami.R;
 
 import java.util.Objects;
@@ -43,7 +45,11 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private static final String TAG = "TAG_HOME";
 
+    private SharedPreferences sharedPref;
+
     private long lastTime,lastSteps,lastMeters;
+    // #1 nickname, points , #2 nickname, points , #3 nickname, points, user rank, points
+    private String top3Leaderboard = "Tamila,50,Pazareva,45,Skata,35,23,15";;
     protected RecyclerView recyclerView;
 
     public HomeFragment() {
@@ -63,12 +69,13 @@ public class HomeFragment extends Fragment {
                                 Manifest.permission.ACCESS_COARSE_LOCATION}, 7431);
             }
             else {
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+                sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
                 lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
                 lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
                 lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+
                 recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerView);
-                RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
+                RecyclerView.Adapter adapter = new RecycleViewAdapter(lastSteps, lastMeters, lastTime, top3Leaderboard);
                 recyclerView.setAdapter(adapter);
             }
         }
@@ -109,7 +116,11 @@ public class HomeFragment extends Fragment {
         view.setTag(TAG);
 
         // Register broadcast receiver for messages from the background service
-        //LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter(String.valueOf(MainActivity.class)));
+        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(String.valueOf(HomeFragment.class)));
+//
+//        // Start the background service
+//        Intent backgroundService = new Intent(getActivity(), FitamiBackgroundService.class);
+//        getActivity().startService(backgroundService);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -118,12 +129,12 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // Get the data from shared preferences to write on the card
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+        sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
         lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
         lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
         lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
 
-        RecyclerView.Adapter adapter = new MyAdapter(lastSteps, lastMeters, lastTime);
+        RecyclerView.Adapter adapter = new RecycleViewAdapter(lastSteps, lastMeters, lastTime, top3Leaderboard);
         recyclerView.setAdapter(adapter);
 
         return view;

@@ -6,20 +6,29 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="4dp">
 
         <RelativeLayout
             android:id="@+id/stepsMedals"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daily Steps"
+                android:textSize="20dp" />
 
             <RelativeLayout
                 android:id="@+id/steps25000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView"
                 android:layout_toRightOf="@+id/steps20000"
-                android:background="@mipmap/medal_with_star">
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/steps25000text"
@@ -27,17 +36,19 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="25000 steps"
-                    android:textSize="10sp" />
+                    android:text="25k steps"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/steps20000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView"
+                android:layout_marginRight="5dp"
                 android:layout_toRightOf="@+id/steps10000"
-                android:background="@mipmap/medal_with_star">
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/steps20000text"
@@ -45,18 +56,19 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="20000 steps"
-                    android:textSize="10sp" />
+                    android:text="20k steps"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/steps10000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
-                android:layout_marginLeft="100dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView"
+                android:layout_marginRight="5dp"
                 android:layout_toRightOf="@+id/steps5000"
-                android:background="@mipmap/medal_with_star">
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/steps10000text"
@@ -64,16 +76,18 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="10000 steps"
-                    android:textSize="10sp" />
+                    android:text="10k steps"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/steps5000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
-                android:background="@mipmap/medal_with_star">
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView"
+                android:layout_marginRight="5dp"
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/steps5000text"
@@ -81,24 +95,39 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="5000 steps"
-                    android:textSize="10sp" />
+                    android:text="5k steps"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/stepsMedals"
+            android:background="#000" />
+
         <RelativeLayout
             android:id="@+id/distanceMedals"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/stepsMedals">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stepsMedals"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daily Distance"
+                android:textSize="20dp" />
 
             <RelativeLayout
                 android:id="@+id/distance25000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView5"
                 android:layout_toRightOf="@+id/distance20000"
-                android:background="@mipmap/medal_with_star">
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/distance25000text"
@@ -106,17 +135,19 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="25km"
-                    android:textSize="10sp" />
+                    android:text="25 km"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/distance20000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView5"
+                android:layout_marginRight="5dp"
                 android:layout_toRightOf="@+id/distance10000"
-                android:background="@mipmap/medal_with_star">
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/distance20000text"
@@ -124,18 +155,19 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="20km"
-                    android:textSize="10sp" />
+                    android:text="20 km"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/distance10000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
-                android:layout_marginLeft="100dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView5"
+                android:layout_marginRight="5dp"
                 android:layout_toRightOf="@+id/distance5000"
-                android:background="@mipmap/medal_with_star">
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/distance10000text"
@@ -143,16 +175,18 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="10km"
-                    android:textSize="10sp" />
+                    android:text="10 km"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/distance5000"
-                android:layout_width="96dp"
-                android:layout_height="100dp"
-                android:layout_margin="0dp"
-                android:background="@mipmap/medal_with_star">
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView5"
+                android:layout_marginRight="5dp"
+                android:background="@mipmap/medal_gray1">
 
                 <TextView
                     android:id="@+id/distance5000text"
@@ -160,11 +194,113 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="5km"
-                    android:textSize="10sp" />
+                    android:text="5 km"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/distanceMedals"
+            android:background="#000" />
+
+        <RelativeLayout
+            android:id="@+id/timeMedals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/distanceMedals"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daily Active Time"
+                android:textSize="20dp" />
+
+            <RelativeLayout
+                android:id="@+id/time120"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView4"
+                android:layout_toRightOf="@+id/time90"
+                android:background="@mipmap/medal_gray1">
+
+                <TextView
+                    android:id="@+id/time120text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="120 minutes"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/time90"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView4"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/time60"
+                android:background="@mipmap/medal_gray1">
+
+                <TextView
+                    android:id="@+id/time90text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="90 minutes"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/time60"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView4"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/time30"
+                android:background="@mipmap/medal_gray1">
+
+                <TextView
+                    android:id="@+id/time60text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="60 minutes"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/time30"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_below="@+id/textView4"
+                android:layout_marginRight="5dp"
+                android:background="@mipmap/medal_gray1">
+
+                <TextView
+                    android:id="@+id/time30text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="30 minutes"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
 

@@ -10,15 +10,17 @@ import android.widget.TextView;
 
 import com.trinity.isabelle.fitami.R;
 
-public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Integer steps;
     private double distance,time;
+    private String top3Leaderboard;
 
-    public MyAdapter(Long _steps, Long _distance, Long _time) {
+    public RecycleViewAdapter(Long _steps, Long _distance, Long _time, String _top3Leaderboard) {
         this.steps=(int)(long)_steps;
         this.distance=(double) (_distance/1000.0);
         this.time=(double)(_time/60.0);
+        this.top3Leaderboard = _top3Leaderboard;
     }
 
     @Override
@@ -63,14 +65,24 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ChallengeViewHolder (View itemView) {
             super(itemView);
 
+
         }
     }
 
     public  static  class LeaderboardViewHolder extends RecyclerView.ViewHolder {
+        TextView userRank, userScore, firstNickname, firstPoints;
+        TextView secondNickname, secondPoints, thirdNickname, thirdPoints;
 
         public LeaderboardViewHolder (View itemView) {
             super(itemView);
-
+            userRank = (TextView) itemView.findViewById(R.id.userRank);
+            userScore = (TextView) itemView.findViewById(R.id.userScore);
+            firstNickname = (TextView) itemView.findViewById(R.id.firstNicknameEdit);
+            firstPoints = (TextView) itemView.findViewById(R.id.firstPointsEdit);
+            secondNickname = (TextView) itemView.findViewById(R.id.secondNicknameEdit);
+            secondPoints = (TextView) itemView.findViewById(R.id.secondPointsEdit);
+            thirdNickname = (TextView) itemView.findViewById(R.id.thirdNicknameEdit);
+            thirdPoints = (TextView) itemView.findViewById(R.id.thirdPointsEdit);
         }
     }
 
@@ -78,7 +90,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()) {
-            case 1:
+            case 1: // Stats
                 StatsViewHolder statsViewHolder = (StatsViewHolder)holder;
                 statsViewHolder.stepsBar.setProgress(steps);
                 statsViewHolder.stepsText.setText(steps+" steps");
@@ -87,9 +99,19 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 statsViewHolder.timeBar.setProgress((int)time);
                 statsViewHolder.timeText.setText(String.format("%.1f", time)+" minutes");
                 break;
-            case 2:
+            case 2: // Challenge
                 break;
-            case 3:
+            case 3: // Leaderboard
+                LeaderboardViewHolder leaderboardViewHolder = (LeaderboardViewHolder)holder;
+                String[] items = top3Leaderboard.split(",");
+                leaderboardViewHolder.firstNickname.setText(items[0]);
+                leaderboardViewHolder.firstPoints.setText(items[1]+" points");
+                leaderboardViewHolder.secondNickname.setText(items[2]);
+                leaderboardViewHolder.secondPoints.setText(items[3]+" points");
+                leaderboardViewHolder.thirdNickname.setText(items[4]);
+                leaderboardViewHolder.thirdPoints.setText(items[5]+" points");
+                leaderboardViewHolder.userRank.setText(items[6]);
+                leaderboardViewHolder.userScore.setText(items[7]);
                 break;
         }
 

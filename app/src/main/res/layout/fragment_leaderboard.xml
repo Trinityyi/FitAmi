@@ -4,9 +4,22 @@
     android:layout_height="match_parent"
     tools:context="com.trinity.isabelle.fitami.Fragments.LeaderboardFragment">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <Spinner
+            android:id="@+id/leaderboardSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/leaderboard_array" />
+
+        <ListView
+            android:id="@+id/leaderboardListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/leaderboardSpinner" />
+
+    </RelativeLayout>
 
 </FrameLayout>

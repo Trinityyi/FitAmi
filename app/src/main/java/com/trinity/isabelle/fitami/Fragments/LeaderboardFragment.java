@@ -1,13 +1,22 @@
 package com.trinity.isabelle.fitami.Fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Filter;
+import android.widget.ListView;
+import android.widget.Spinner;
 
+import com.trinity.isabelle.fitami.Other.LeaderboardAdaper;
 import com.trinity.isabelle.fitami.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,7 +27,7 @@ import com.trinity.isabelle.fitami.R;
  * Use the {@link LeaderboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LeaderboardFragment extends Fragment {
+public class LeaderboardFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,9 +38,63 @@ public class LeaderboardFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private static final String TAG = "TAG_LEADERBOARD";
+
+    private List<Leaderboard> leaderboardEntityList = new ArrayList<Leaderboard>();
+    private ListView listView;
+    private LeaderboardAdaper adapter;
+    private Spinner leaderboardSpinner;
 
     public LeaderboardFragment() {
         // Required empty public constructor
+    }
+
+    public class Leaderboard {
+        private long id;
+        private long dataId; // 0: steps, 1: distance, 2: time, 3: score
+        private String rank;
+        private String userNickname;
+        private String data;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public long getDataId() {
+            return dataId;
+        }
+
+        public void setDataId(long dataId) {
+            this.dataId = dataId;
+        }
+
+        public String getRank() {
+            return rank;
+        }
+
+        public void setRank(String rank) {
+            this.rank = rank;
+        }
+
+        public String getUserNickname() {
+            return userNickname;
+        }
+
+        public void setUserNickname(String userNickname) {
+            this.userNickname = userNickname;
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
+        }
     }
 
     /**
@@ -65,7 +128,37 @@ public class LeaderboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leaderboard, container, false);
+        View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
+        view.setTag(TAG);
+
+        loadDummyLeaderboard();
+
+        leaderboardSpinner = (Spinner) view.findViewById(R.id.leaderboardSpinner);
+        listView = (ListView) view.findViewById(R.id.leaderboardListView);
+
+        adapter = new LeaderboardAdaper(leaderboardEntityList);
+        listView.setAdapter(adapter);
+
+        leaderboardSpinner.setOnItemSelectedListener(this);
+
+        return view;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Integer dataId = leaderboardSpinner.getSelectedItemPosition();
+        //Here we use the Filtering Feature which we implemented in our Adapter class.
+        adapter.getFilter().filter(Integer.toString(dataId),new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -75,16 +168,86 @@ public class LeaderboardFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
+    private List<Leaderboard> loadDummyLeaderboard(){
+
+        leaderboardEntityList = new ArrayList<>();
+        Leaderboard leaderboard1 = new Leaderboard();
+        leaderboard1.setId(1);
+        leaderboard1.setDataId(0);
+        leaderboard1.setRank("1");
+        leaderboard1.setUserNickname("Superman");
+        leaderboard1.setData("15000");
+        leaderboardEntityList.add(leaderboard1);
+
+        Leaderboard leaderboard2 = new Leaderboard();
+        leaderboard2.setId(2);
+        leaderboard2.setDataId(0);
+        leaderboard2.setRank("2");
+        leaderboard2.setUserNickname("Batman");
+        leaderboard2.setData("10000");
+        leaderboardEntityList.add(leaderboard2);
+
+        Leaderboard leaderboard3 = new Leaderboard();
+        leaderboard3.setId(3);
+        leaderboard3.setDataId(0);
+        leaderboard3.setRank("3");
+        leaderboard3.setUserNickname("Foufoutos");
+        leaderboard3.setData("8000");
+        leaderboardEntityList.add(leaderboard3);
+
+        Leaderboard leaderboard4 = new Leaderboard();
+        leaderboard4.setId(4);
+        leaderboard4.setDataId(1);
+        leaderboard4.setRank("1");
+        leaderboard4.setUserNickname("Superman");
+        leaderboard4.setData("1500");
+        leaderboardEntityList.add(leaderboard4);
+
+        Leaderboard leaderboard5 = new Leaderboard();
+        leaderboard5.setId(5);
+        leaderboard5.setDataId(2);
+        leaderboard5.setRank("1");
+        leaderboard5.setUserNickname("Superman");
+        leaderboard5.setData("7200");
+        leaderboardEntityList.add(leaderboard5);
+
+        Leaderboard leaderboard6 = new Leaderboard();
+        leaderboard6.setId(6);
+        leaderboard6.setDataId(2);
+        leaderboard6.setRank("2");
+        leaderboard6.setUserNickname("Batman");
+        leaderboard6.setData("5400");
+        leaderboardEntityList.add(leaderboard6);
+
+        Leaderboard leaderboard7 = new Leaderboard();
+        leaderboard7.setId(7);
+        leaderboard7.setDataId(3);
+        leaderboard7.setRank("1");
+        leaderboard7.setUserNickname("Superman");
+        leaderboard7.setData("80");
+        leaderboardEntityList.add(leaderboard7);
+
+        Leaderboard leaderboard8 = new Leaderboard();
+        leaderboard8.setId(8);
+        leaderboard8.setDataId(3);
+        leaderboard8.setRank("2");
+        leaderboard8.setUserNickname("Batman");
+        leaderboard8.setData("50");
+        leaderboardEntityList.add(leaderboard8);
+
+        return leaderboardEntityList;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
-//    }
+    }
 
     @Override
     public void onDetach() {

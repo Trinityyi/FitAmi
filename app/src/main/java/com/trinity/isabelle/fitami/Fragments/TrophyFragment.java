@@ -1,5 +1,6 @@
 package com.trinity.isabelle.fitami.Fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ public class TrophyFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private static final String TAG = "TAG_TROPHY";
 
     public TrophyFragment() {
         // Required empty public constructor
@@ -65,7 +67,14 @@ public class TrophyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trophy, container, false);
+        View view = inflater.inflate(R.layout.fragment_trophy, container, false);
+        view.setTag(TAG);
+
+
+        // TODO: change layout background image if user has gotten a medal
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -75,16 +84,16 @@ public class TrophyFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
-//    }
+    }
 
     @Override
     public void onDetach() {

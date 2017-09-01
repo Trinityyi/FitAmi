@@ -27,7 +27,7 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/rankText"
+                android:id="@+id/userRankTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="false"
@@ -36,11 +36,11 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/pointRank"
+                android:id="@+id/userRank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignRight="@+id/rankText"
+                android:layout_alignRight="@+id/userRankTxt"
                 android:text="1"
                 android:textSize="20dp" />
         </RelativeLayout>
@@ -55,7 +55,7 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/pointText"
+                android:id="@+id/userScoreTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -63,13 +63,13 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/pointScore"
+                android:id="@+id/userScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentLeft="false"
                 android:layout_alignParentRight="false"
-                android:layout_alignRight="@+id/pointText"
+                android:layout_alignRight="@+id/userScoreTxt"
                 android:text="50"
                 android:textSize="20dp" />
         </RelativeLayout>

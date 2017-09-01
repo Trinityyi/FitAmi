@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity
                 lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
                 lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
                 lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
-                userNickname = sharedPref.getString(getString(R.string.preference_nickname_key),"undefined");
             }
         }
     };
