@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -100,7 +101,8 @@
                     android:layout_height="50dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@mipmap/third"
+                    app:srcCompat="@mipmap/third" />
 
                 <TextView
                     android:id="@+id/thirdRankTxt"
@@ -141,7 +143,9 @@
                     android:layout_height="75dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@mipmap/first"
+                    app:srcCompat="@mipmap/first"
+                    tools:src="@mipmap/first" />
 
                 <TextView
                     android:id="@+id/firstRankTxt"
@@ -182,7 +186,8 @@
                     android:layout_height="60dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@mipmap/second"
+                    app:srcCompat="@mipmap/second" />
 
                 <TextView
                     android:id="@+id/secondRankTxt"
