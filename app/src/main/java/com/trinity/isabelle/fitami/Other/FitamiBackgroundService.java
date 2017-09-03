@@ -182,7 +182,6 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     // Service startup
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        Log.d("Random", ""+dailyMedal);
         // Initialize shared preferences and firebase variables
         sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
         try {
@@ -197,10 +196,12 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         lastScore = retrievePreferenceLong(R.string.preference_points_key, 0l);                   // This is known
         // Note: If, for some reason, the data above is wrong or not up-to-date, when the data is read from Firebase, it will be updated
         currentDate = getCurrentDate();
+        String previousDate = retrievePreferenceString(R.string.preference_date_key, "19700101");
         // Check if currentDate is different from the date stored in preferences and possibly write to Firebase for the previous one
-        if(!Objects.equals(currentDate, retrievePreferenceString(R.string.preference_date_key, "19700101"))
-                && !Objects.equals(retrievePreferenceString(R.string.preference_date_key, "19700101"), "19700101")){
-            writePreviousDayDataToFirebase();
+        if(!Objects.equals(currentDate, previousDate)){
+            if(!Objects.equals(previousDate, "19700101")) {
+                writePreviousDayDataToFirebase();
+            }
             // After writing to Firebase, initialize the new date data and write a new entry for the date in Firebase
             initializeNewDay();
         }
@@ -231,6 +232,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 0, this);
         }
         dailyMedal = retrievePreferenceInt(R.string.preference_daily_challenge_key, 0);
+        Log.d("Random", ""+dailyMedal);
         // Start running repeating tasks
         sensorUpdate.run();
         // Set date update task to run when the date changes
@@ -346,6 +348,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     // Initialize a new day and write it to Firebase
     public void initializeNewDay(){
         currentDate = getCurrentDate();
+        updatePreferenceString(R.string.preference_date_key, currentDate);
         lastStepCounterNanoTime = System.nanoTime();
         lastStepCounterValue = -1;
         lastLatitude = 0.0f;
@@ -364,6 +367,7 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         // Set daily challenge, cleanup daily medals
         dailyMedal = new Random().nextInt(12);
         updatePreferenceInt(R.string.preference_daily_challenge_key, dailyMedal);
+        Log.d("Daily", ""+dailyMedal);
         for (int i = 0; i<24; i++){
             updatePreferenceIndexedLong(R.string.preference_daily_medal_key, i, 0);
         }
