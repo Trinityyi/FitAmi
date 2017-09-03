@@ -29,7 +29,10 @@ import com.trinity.isabelle.fitami.Fragments.HomeFragment;
 import com.trinity.isabelle.fitami.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
 
@@ -114,6 +117,65 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         @Override
         public void onCancelled(DatabaseError databaseError) {
             Log.e("User Listener", "Something went horribly wrong!");
+        }
+    };
+
+    // Read users data from Firebase and figure out the rankings based on score
+    final ValueEventListener userListListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            ArrayList<RankableUserData> userRankings = new ArrayList<RankableUserData>();
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                userRankings.add(new RankableUserData(
+                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                        Long.valueOf(snapshot.child("score").getValue(Long.class))));
+            }
+            for (int i = 0; i <10; i++){
+                userRankings.add(new RankableUserData("Fitami user", 0));
+            }
+            Collections.sort(userRankings, RankableUserData.RankableUserDataComparator);
+            // TODO: Trim list to 3 people, get user rank, make string, broadcast
+            for(RankableUserData user : userRankings){
+                Log.d("Ranked",user.getNickname()+"("+user.getScoringData()+")");
+            }
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("User List Listener", "Something went horribly wrong!");
+        }
+    };
+
+    // Read day/users data from Firebase and figure out the rankings based on steps, meters and time
+    final ValueEventListener dayUserListListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            ArrayList<RankableUserData> dailyStepRankings = new ArrayList<RankableUserData>();
+            ArrayList<RankableUserData> dailyDistanceRankings = new ArrayList<RankableUserData>();
+            ArrayList<RankableUserData> dailyTimeRankings = new ArrayList<RankableUserData>();
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                dailyStepRankings.add(new RankableUserData(
+                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                        Long.valueOf(snapshot.child("steps").getValue(Long.class))));
+                dailyDistanceRankings.add(new RankableUserData(
+                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                        Long.valueOf(snapshot.child("distance").getValue(Long.class))));
+                dailyTimeRankings.add(new RankableUserData(
+                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                        Long.valueOf(snapshot.child("activeTime").getValue(Long.class))));
+            }
+            for (int i = 0; i <10; i++){
+                dailyStepRankings.add(new RankableUserData("Fitami user", 0));
+                dailyDistanceRankings.add(new RankableUserData("Fitami user", 0));
+                dailyTimeRankings.add(new RankableUserData("Fitami user", 0));
+            }
+            Collections.sort(dailyStepRankings, RankableUserData.RankableUserDataComparator);
+            Collections.sort(dailyDistanceRankings, RankableUserData.RankableUserDataComparator);
+            Collections.sort(dailyTimeRankings, RankableUserData.RankableUserDataComparator);
+            // TODO: Trim lists to 10 people, get user rank, make strings, broadcast
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("User List Listener", "Something went horribly wrong!");
         }
     };
 
@@ -209,7 +271,8 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
         rootRef.child("days/" + currentDate + "/" + userId).addListenerForSingleValueEvent(dayUserInitialListener);
         rootRef.child("users/" + userId).addValueEventListener(userListener);
         rootRef.child("days/" + currentDate + "/" + userId).addValueEventListener(dayUserListener);
-        // TODO: Add a listener for the day and all users to get leaderboards
+        rootRef.child("users").addValueEventListener(userListListener);
+        rootRef.child("days/" + currentDate).addValueEventListener(dayUserListListener);
         // Initialize step counter sensor
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
