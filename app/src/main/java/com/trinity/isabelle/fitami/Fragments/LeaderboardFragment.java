@@ -133,6 +133,7 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
         view.setTag(TAG);
 
         loadDummyLeaderboard();
+        //loadLeaderboard();
 
         leaderboardSpinner = (Spinner) view.findViewById(R.id.leaderboardSpinner);
         listView = (ListView) view.findViewById(R.id.leaderboardListView);

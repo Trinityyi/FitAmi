@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -19,8 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.trinity.isabelle.fitami.R;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -37,48 +41,71 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPagerWelcome);
-        btnNext = (Button) findViewById(R.id.btnWelcomeNext);
-
-        // layouts of all welcome sliders
-        layouts = new int[]{
-                R.layout.welcome_slide,
-                R.layout.activity_settings
-        };
-
-        WelcomeActivity.MyViewPagerAdapter myViewPagerAdapter = new WelcomeActivity.MyViewPagerAdapter();
-        viewPager.setAdapter(myViewPagerAdapter);
-
-        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //database reference pointing to root of database
         rootRef = FirebaseDatabase.getInstance().getReference();
         //database reference pointing to user node
         userRef = rootRef.child("users").child(userId);
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-        sharedPref.edit().putString(getString(R.string.preference_uid_key), userId).apply();
 
-
-        btnNext.setOnClickListener(new View.OnClickListener() {
-
+        rootRef.child("users/" + userId).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                // checking for last page
-                // if last page home screen will be launched
-                int current = getItem(+1);
-                if (current < layouts.length) {
-                    // move to next screen
-                    viewPager.setCurrentItem(current);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    SharedPreferences sharedPref = WelcomeActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+                    sharedPref.edit().putString(getString(R.string.preference_uid_key), userId).apply();
+                    // TODO: handle the case where the data already exists
+                    startActivity(new Intent(WelcomeActivity.this, TutorialActivity.class));
+                    finish();
                 }
                 else {
+                    // TODO: handle the case where the data does not yet exist
+                    setContentView(R.layout.activity_welcome);
 
-                    launchTutorialScreen();
+                    viewPager = (ViewPager) findViewById(R.id.viewPagerWelcome);
+                    btnNext = (Button) findViewById(R.id.btnWelcomeNext);
+
+                    // layouts of all welcome sliders
+                    layouts = new int[]{
+                            R.layout.welcome_slide,
+                            R.layout.activity_settings
+                    };
+
+                    WelcomeActivity.MyViewPagerAdapter myViewPagerAdapter = new WelcomeActivity.MyViewPagerAdapter();
+                    viewPager.setAdapter(myViewPagerAdapter);
+
+                    viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+                    SharedPreferences sharedPref = WelcomeActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+                    sharedPref.edit().putString(getString(R.string.preference_uid_key), userId).apply();
+
+
+                    btnNext.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            // checking for last page
+                            // if last page home screen will be launched
+                            int current = getItem(+1);
+                            if (current < layouts.length) {
+                                // move to next screen
+                                viewPager.setCurrentItem(current);
+                            }
+                            else {
+
+                                launchTutorialScreen();
+                            }
+                        }
+                    });
                 }
             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
+
 
     }
 
