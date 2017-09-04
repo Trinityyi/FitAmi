@@ -124,20 +124,41 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
     final ValueEventListener userListListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
+            Log.d("Leaderboard", userId);
             ArrayList<RankableUserData> userRankings = new ArrayList<RankableUserData>();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                userRankings.add(new RankableUserData(
+                if (Objects.equals(userId, snapshot.getKey())){
+                    userRankings.add(new RankableUserData(
+                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                        Long.valueOf(snapshot.child("score").getValue(Long.class)),
+                        true));
+                }
+                else {
+                    userRankings.add(new RankableUserData(
                         String.valueOf(snapshot.child("nickname").getValue(String.class)),
                         Long.valueOf(snapshot.child("score").getValue(Long.class))));
+                }
             }
             for (int i = 0; i <10; i++){
                 userRankings.add(new RankableUserData("Fitami user", 0));
             }
             Collections.sort(userRankings, RankableUserData.RankableUserDataComparator);
-            // TODO: Trim list to 3 people, get user rank, make string, broadcast
-            for(RankableUserData user : userRankings){
-                Log.d("Ranked",user.getNickname()+"("+user.getScoringData()+")");
+            String leaderboardData = userRankings.get(0).getNickname()+","+
+                    userRankings.get(0).getScoringData()+","+
+                    userRankings.get(1).getNickname()+","+
+                    userRankings.get(1).getScoringData()+","+
+                    userRankings.get(2).getNickname()+","+
+                    userRankings.get(2).getScoringData()+",";
+            for (int i = 0; i < userRankings.size(); i++) {
+                if (userRankings.get(i).isCurrentUser()){
+                    leaderboardData += (i+1) + "," + userRankings.get(i).getScoringData();
+                }
             }
+            updatePreferenceString(R.string.preference_total_score_leaderboard_key, leaderboardData);
+            Log.d("Leaderboard", leaderboardData);
+            Intent intent = new Intent(String.valueOf(MainActivity.class));
+            intent.putExtra(String.valueOf(R.string.intent_service_string_extra), "Data has been updated!");
+            LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(intent);
         }
         @Override
         public void onCancelled(DatabaseError databaseError) {

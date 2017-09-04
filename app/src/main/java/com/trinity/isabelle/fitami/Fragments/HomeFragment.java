@@ -51,7 +51,7 @@ public class HomeFragment extends DataFragment {
     private long lastTime,lastSteps,lastMeters;
     private int dailyMedal;
     // #1 nickname, points , #2 nickname, points , #3 nickname, points, user rank, points
-    private String top3Leaderboard = "Tamila,50,Pazareva,45,Skata,35,23,15";;
+    private String top3Leaderboard;
     protected RecyclerView recyclerView;
 
     public HomeFragment() {
@@ -105,6 +105,7 @@ public class HomeFragment extends DataFragment {
         lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
         lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
         dailyMedal = sharedPref.getInt(getString(R.string.preference_daily_challenge_key), 0);
+        top3Leaderboard = sharedPref.getString(getString(R.string.preference_total_score_leaderboard_key), "...,0,...,0,...,0,1,0");
         String dailyChallenge = "Reach "+getResources().getStringArray(R.array.medals_array)[dailyMedal]+" and earn bonus points!";
         if(sharedPref.getLong(getString(R.string.preference_daily_medal_key) + dailyMedal + 12, 0l) > 0l){
             dailyChallenge += " (Completed)";
@@ -123,6 +124,8 @@ public class HomeFragment extends DataFragment {
         lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
         lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
         dailyMedal = sharedPref.getInt(getString(R.string.preference_daily_challenge_key), 0);
+        top3Leaderboard = sharedPref.getString(getString(R.string.preference_total_score_leaderboard_key), "...,0,...,0,...,0,1,0");
+
         String dailyChallenge = "Reach "+getResources().getStringArray(R.array.medals_array)[dailyMedal]+" and earn bonus points!";
         if(sharedPref.getLong(getString(R.string.preference_daily_medal_key) + dailyMedal + 12, 0l) > 0l){
             dailyChallenge += " (Completed)";

@@ -9,6 +9,7 @@ import java.util.Comparator;
 public class RankableUserData implements Comparable<RankableUserData> {
     private String nickname;
     private long scoringData;
+    private boolean isCurrentUser;
 
     public long getScoringData(){
         return this.scoringData;
@@ -18,9 +19,20 @@ public class RankableUserData implements Comparable<RankableUserData> {
         return this.nickname;
     }
 
+    public boolean isCurrentUser(){
+        return this.isCurrentUser;
+    }
+
     public RankableUserData(String nickname, long scoringData){
         this.nickname = nickname;
         this.scoringData = scoringData;
+        this.isCurrentUser = false;
+    }
+
+    public RankableUserData(String nickname, long scoringData, boolean isCurrentUser){
+        this.nickname = nickname;
+        this.scoringData = scoringData;
+        this.isCurrentUser = isCurrentUser;
     }
 
     public int compareTo(RankableUserData otherUserData) {
