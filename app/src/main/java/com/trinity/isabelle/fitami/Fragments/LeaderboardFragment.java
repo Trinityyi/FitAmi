@@ -1,9 +1,11 @@
 package com.trinity.isabelle.fitami.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.trinity.isabelle.fitami.Other.LeaderboardAdaper;
+import com.trinity.isabelle.fitami.Other.RecycleViewAdapter;
 import com.trinity.isabelle.fitami.R;
 import com.trinity.isabelle.fitami.Other.DataFragment;
 
@@ -40,6 +43,8 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
 
     private OnFragmentInteractionListener mListener;
     private static final String TAG = "TAG_LEADERBOARD";
+
+    private SharedPreferences sharedPref;
 
     private List<Leaderboard> leaderboardEntityList = new ArrayList<Leaderboard>();
     private ListView listView;
@@ -132,6 +137,9 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
         View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
         view.setTag(TAG);
 
+        // Get the data from shared preferences to write on the card
+        sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+
         loadDummyLeaderboard();
         //loadLeaderboard();
 
@@ -145,6 +153,15 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
 
         return view;
     }
+
+    public void setFragmentData(){
+        if(!isAdded())  return;
+        // Get the data from shared preferences to write on the card
+        sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+        //top3Leaderboard = sharedPref.getString(getString(R.string.preference_total_score_leaderboard_key), "...,0,...,0,...,0,1,0");
+
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -240,9 +257,6 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
         return leaderboardEntityList;
     }
 
-    public void setFragmentData(){
-        // TODO
-    }
 
     @Override
     public void onAttach(Context context) {
