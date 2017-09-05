@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.trinity.isabelle.fitami.Fragments.LeaderboardFragment;
@@ -47,6 +48,7 @@ public class LeaderboardAdaper extends BaseAdapter implements Filterable {
         TextView tvRank;
         TextView tvNickname;
         TextView tvData;
+        ImageView imgBadge;
     }
 
     @Override
@@ -54,10 +56,12 @@ public class LeaderboardAdaper extends BaseAdapter implements Filterable {
 
         View updateView;
         ViewHolder viewHolder;
+
         if (view == null) {
             updateView = LayoutInflater.from(parent.getContext()).inflate(R.layout.leaderboard_listitem, parent,false);
             viewHolder = new ViewHolder();
 
+            viewHolder.imgBadge = (ImageView) updateView.findViewById(R.id.imgBadge);
             viewHolder.tvRank = (TextView) updateView.findViewById(R.id.listitemRank);
             viewHolder.tvNickname = (TextView) updateView.findViewById(R.id.listitemNickname);
             viewHolder.tvData = (TextView) updateView.findViewById(R.id.listitemData);
@@ -71,7 +75,17 @@ public class LeaderboardAdaper extends BaseAdapter implements Filterable {
 
         final LeaderboardFragment.Leaderboard item = getItem(position);
 
-        viewHolder.tvRank.setText(item.getRank());
+        if (position==0) {
+            viewHolder.imgBadge.setImageResource(R.mipmap.gold_medal);
+        } else if (position ==1){
+            viewHolder.imgBadge.setImageResource(R.mipmap.silver_medal);
+        }else if (position == 2) {
+            viewHolder.imgBadge.setImageResource(R.mipmap.bronze_medal);
+        }else {
+            viewHolder.imgBadge.setImageResource(R.mipmap.gray_medal);
+        }
+
+        viewHolder.tvRank.setText("#"+item.getRank());
         viewHolder.tvNickname.setText(item.getUserNickname());
         viewHolder.tvData.setText(item.getData());
 
@@ -86,7 +100,7 @@ public class LeaderboardAdaper extends BaseAdapter implements Filterable {
         return leaderboardFilter;
     }
 
-// InnerClass for enabling Search feature by implementing the methods
+// InnerClass for enabling Filter feature by implementing the methods
 
     private class LeaderboardFilter extends Filter
     {
