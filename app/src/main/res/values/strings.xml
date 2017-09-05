@@ -16,6 +16,8 @@
     <string name="preference_daily_medal_key">com.trinity.isabelle.fitami.preferences.key.medal.daily</string>
     <string name="preference_daily_challenge_key">com.trinity.isabelle.fitami.preferences.key.challenge</string>
     <string name="preference_total_score_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.score</string>
+    <string name="preference_daily_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily</string>
+    <string name="preference_daily_user_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily.user</string>
 
     <string name="intent_service_string_extra">com.trinity.isabelle.fitami.backgroundservice</string>
 

@@ -155,7 +155,6 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
                 }
             }
             updatePreferenceString(R.string.preference_total_score_leaderboard_key, leaderboardData);
-            Log.d("Leaderboard", leaderboardData);
             Intent intent = new Intent(String.valueOf(MainActivity.class));
             intent.putExtra(String.valueOf(R.string.intent_service_string_extra), "Data has been updated!");
             LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(intent);
@@ -174,15 +173,31 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             ArrayList<RankableUserData> dailyDistanceRankings = new ArrayList<RankableUserData>();
             ArrayList<RankableUserData> dailyTimeRankings = new ArrayList<RankableUserData>();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                dailyStepRankings.add(new RankableUserData(
-                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
-                        Long.valueOf(snapshot.child("steps").getValue(Long.class))));
-                dailyDistanceRankings.add(new RankableUserData(
-                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
-                        Long.valueOf(snapshot.child("distance").getValue(Long.class))));
-                dailyTimeRankings.add(new RankableUserData(
-                        String.valueOf(snapshot.child("nickname").getValue(String.class)),
-                        Long.valueOf(snapshot.child("activeTime").getValue(Long.class))));
+                if (Objects.equals(userId, snapshot.getKey())){
+                    dailyStepRankings.add(new RankableUserData(
+                            String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                            Long.valueOf(snapshot.child("steps").getValue(Long.class)),
+                            true));
+                    dailyDistanceRankings.add(new RankableUserData(
+                            String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                            Long.valueOf(snapshot.child("distance").getValue(Long.class)),
+                            true));
+                    dailyTimeRankings.add(new RankableUserData(
+                            String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                            Long.valueOf(snapshot.child("activeTime").getValue(Long.class)),
+                            true));
+                }
+                else {
+                    dailyStepRankings.add(new RankableUserData(
+                            String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                            Long.valueOf(snapshot.child("steps").getValue(Long.class))));
+                    dailyDistanceRankings.add(new RankableUserData(
+                            String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                            Long.valueOf(snapshot.child("distance").getValue(Long.class))));
+                    dailyTimeRankings.add(new RankableUserData(
+                            String.valueOf(snapshot.child("nickname").getValue(String.class)),
+                            Long.valueOf(snapshot.child("activeTime").getValue(Long.class))));
+                }
             }
             for (int i = 0; i <10; i++){
                 dailyStepRankings.add(new RankableUserData("Fitami user", 0));
@@ -192,7 +207,48 @@ public class FitamiBackgroundService extends IntentService implements SensorEven
             Collections.sort(dailyStepRankings, RankableUserData.RankableUserDataComparator);
             Collections.sort(dailyDistanceRankings, RankableUserData.RankableUserDataComparator);
             Collections.sort(dailyTimeRankings, RankableUserData.RankableUserDataComparator);
-            // TODO: Trim lists to 10 people, get user rank, make strings, broadcast
+            String stepLeaderboardData = "";
+            String distanceLeaderboardData = "";
+            String timeLeaderboardData = "";
+            for(int i = 0; i <10; i++){
+                stepLeaderboardData += dailyStepRankings.get(i).getNickname()+","
+                        +dailyStepRankings.get(i).getScoringData();
+                distanceLeaderboardData += dailyDistanceRankings.get(i).getNickname()+","
+                        +dailyDistanceRankings.get(i).getScoringData();
+                timeLeaderboardData += dailyTimeRankings.get(i).getNickname()+","
+                        +dailyTimeRankings.get(i).getScoringData();
+                if(i != 9){
+                    stepLeaderboardData += ",";
+                    distanceLeaderboardData += ",";
+                    timeLeaderboardData += ",";
+                }
+                else {
+                    stepLeaderboardData += ";";
+                    distanceLeaderboardData += ";";
+                    timeLeaderboardData += ";";
+                }
+            }
+            String userLeaderboardData = "";
+            for (int i = 0; i < dailyStepRankings.size(); i++) {
+                if (dailyStepRankings.get(i).isCurrentUser()){
+                    userLeaderboardData += (i+1) + "," + dailyStepRankings.get(i).getScoringData()+";";
+                }
+            }
+            for (int i = 0; i < dailyDistanceRankings.size(); i++) {
+                if (dailyDistanceRankings.get(i).isCurrentUser()){
+                    userLeaderboardData += (i+1) + "," + dailyDistanceRankings.get(i).getScoringData()+";";
+                }
+            }
+            for (int i = 0; i < dailyTimeRankings.size(); i++) {
+                if (dailyTimeRankings.get(i).isCurrentUser()){
+                    userLeaderboardData += (i+1) + "," + dailyTimeRankings.get(i).getScoringData()+";";
+                }
+            }
+            updatePreferenceString(R.string.preference_daily_leaderboard_key, stepLeaderboardData+distanceLeaderboardData+timeLeaderboardData);
+            updatePreferenceString(R.string.preference_daily_user_leaderboard_key, userLeaderboardData);
+            Intent intent = new Intent(String.valueOf(MainActivity.class));
+            intent.putExtra(String.valueOf(R.string.intent_service_string_extra), "Data has been updated!");
+            LocalBroadcastManager.getInstance(FitamiBackgroundService.this).sendBroadcast(intent);
         }
         @Override
         public void onCancelled(DatabaseError databaseError) {
