@@ -38,7 +38,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private long lastTime,lastSteps,lastMeters;
-    private String userNickname;
+    private String nickname,email;
 
     private NavigationView navigationView;
     private Toolbar toolbar;
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
                 lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
                 lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
                 lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
+                nickname = sharedPref.getString(getString(R.string.preference_nickname_key), "...");
                 //getHomeFragment().setFragmentData();
                 if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
                     ((DataFragment)getSupportFragmentManager().findFragmentByTag(CURRENT_TAG)).setFragmentData();
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void loadNavHeader() {
         // name, email
-        txtName.setText("Test Test");
+        txtName.setText(nickname);
         txtEmail.setText("test@email.com");
     }
 

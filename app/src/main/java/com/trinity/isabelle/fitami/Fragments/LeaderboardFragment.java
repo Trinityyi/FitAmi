@@ -48,7 +48,8 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
 
     private SharedPreferences sharedPref;
 
-    // #1 nickname, steps,..,..; #1 nickname, distance,..,..;#1 nickname, time,..,..; user rank, points
+    // #1 nickname, steps,..,..; #1 nickname, distance,..,..;#1 nickname, time,..,..
+    // user rank, steps; user rank, distance; user rank, time
     private String top10Leaderboard, userLeaderboard;
     private List<Leaderboard> leaderboardEntityList = new ArrayList<Leaderboard>();
     private ListView listView;
