@@ -38,7 +38,7 @@ public class TrophyFragment extends DataFragment {
 
     private SharedPreferences sharedPref;
     int dailyChallenge;
-    String[] badges = new String[12];
+    String[] badges = new String[24];
     ImageView imgBadge, imgBadgeDaily;
 
 
@@ -85,8 +85,8 @@ public class TrophyFragment extends DataFragment {
         // Get the data from shared preferences to write on the card
         sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
         dailyChallenge = sharedPref.getInt(getString(R.string.preference_daily_challenge_key),0);
-        for (int i=0; i<12; i++) {
-            badges[i]= String.valueOf(sharedPref.getLong(getString(R.string.preference_daily_medal_key)+i,01));
+        for (int i=0; i<24; i++) {
+            badges[i]= String.valueOf(sharedPref.getLong(getString(R.string.preference_daily_medal_key)+i,0l));
         }
 
         for(int i=0; i<12; i++) {
@@ -99,7 +99,7 @@ public class TrophyFragment extends DataFragment {
             if (dailyChallenge == i){
                 imgBadgeDaily.setVisibility(View.VISIBLE);
             }
-            if(badges[i].equals("1")) {
+            if(badges[i].equals("1") || badges[i+12].equals("1")) {
                 imgBadge.setAlpha(1.0f);
             }
             else {
@@ -123,8 +123,26 @@ public class TrophyFragment extends DataFragment {
         // Get the data from shared preferences to write on the card
         sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
         dailyChallenge = sharedPref.getInt(getString(R.string.preference_daily_challenge_key),0);
-        for (int i=0; i>12; i++) {
-            badges[i]= String.valueOf(sharedPref.getLong(getString(R.string.preference_daily_medal_key)+i,01));
+        for (int i=0; i<24; i++) {
+            badges[i]= String.valueOf(sharedPref.getLong(getString(R.string.preference_daily_medal_key)+i,0l));
+        }
+
+        for(int i=0; i<12; i++) {
+            String imgID = "imgBadge"+i;
+            String imgDailyID = "imgBadgeDaily"+i;
+            int resID = getResources().getIdentifier(imgID, "id", "com.trinity.isabelle.fitami");
+            int resDailyID = getResources().getIdentifier(imgDailyID, "id", "com.trinity.isabelle.fitami");
+            imgBadge = ((ImageView) getView().findViewById(resID));
+            imgBadgeDaily = ((ImageView) getView().findViewById(resDailyID));
+            if (dailyChallenge == i){
+                imgBadgeDaily.setVisibility(View.VISIBLE);
+            }
+            if(badges[i].equals("1") || badges[i+12].equals("1")) {
+                imgBadge.setAlpha(1.0f);
+            }
+            else {
+                imgBadge.setAlpha(0.3f);
+            }
         }
     }
 

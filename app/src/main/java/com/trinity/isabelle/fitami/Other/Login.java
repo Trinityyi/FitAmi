@@ -38,6 +38,7 @@ public class Login extends AppCompatActivity {
             // already signed in
             SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
             sharedPref.edit().putString(getString(R.string.preference_uid_key), auth.getCurrentUser().getUid()).apply();
+            sharedPref.edit().putString(getString(R.string.preference_email_key), auth.getCurrentUser().getEmail()).apply();
             startActivity(new Intent(Login.this, MainActivity.class));
             finish();
 

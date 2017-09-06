@@ -18,6 +18,7 @@
     <string name="preference_total_score_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.score</string>
     <string name="preference_daily_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily</string>
     <string name="preference_daily_user_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily.user</string>
+    <string name="preference_email_key">com.trinity.isabelle.fitami.preferences.key.email</string>
 
     <string name="intent_service_string_extra">com.trinity.isabelle.fitami.backgroundservice</string>
 

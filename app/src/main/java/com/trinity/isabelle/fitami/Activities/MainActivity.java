@@ -138,8 +138,11 @@ public class MainActivity extends AppCompatActivity
      */
     private void loadNavHeader() {
         // name, email
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
+        nickname = sharedPref.getString(getString(R.string.preference_nickname_key), "Fitami User");
+        String email = sharedPref.getString(getString(R.string.preference_email_key), "user@mail.com");
         txtName.setText(nickname);
-        txtEmail.setText("test@email.com");
+        txtEmail.setText(email);
     }
 
     /***

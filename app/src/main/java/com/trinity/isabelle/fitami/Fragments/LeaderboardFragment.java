@@ -174,6 +174,21 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
         top10Leaderboard = sharedPref.getString(getString(R.string.preference_daily_leaderboard_key), "...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0;...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0;...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0,...,0");
         userLeaderboard = sharedPref.getString(getString(R.string.preference_daily_user_leaderboard_key), "1,0,1,0,1,0");
 
+        items = userLeaderboard.split(";");
+
+        loadLeaderboard(top10Leaderboard);
+
+        userRank = (TextView) getView().findViewById(R.id.editUserRank);
+        userData = (TextView) getView().findViewById(R.id.editUserData);
+
+        leaderboardSpinner = (Spinner) getView().findViewById(R.id.leaderboardSpinner);
+        listView = (ListView) getView().findViewById(R.id.leaderboardListView);
+
+        adapter = new LeaderboardAdaper(leaderboardEntityList);
+        listView.setAdapter(adapter);
+
+        leaderboardSpinner.setOnItemSelectedListener(this);
+
     }
 
 
