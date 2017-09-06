@@ -35,14 +35,14 @@
     <!-- Navigation Drawer menu labels -->
     <string name="nav_home">Home</string>
     <string name="nav_profile">Profile</string>
-    <string name="nav_trophy">Trophy Room</string>
+    <string name="nav_badge">Activity Badges</string>
     <string name="nav_leaderboard">Leaderboard</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
         <item>Profile</item>
-        <item>Trophy Room</item>
+        <item>Activity Badges</item>
         <item>Leaderboard</item>
     </string-array>
 
@@ -51,7 +51,8 @@
     <string name="skip">SKIP</string>
     <string name="start">START</string>
     <string name="slide_1_title">Welcome to FitAmi!</string>
-    <string name="slide_1_desc">FitAmi yada yada yada</string>
+    <string name="slide_1_desc">A modern social fitness tracking application.
+        Exercise daily, earn medals, complete challenges and participate in daily leaderboards</string>
     <string name="slide_2_title">Movie Tickets</string>
     <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
 

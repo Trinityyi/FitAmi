@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,12 @@ import com.trinity.isabelle.fitami.Other.DataFragment;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TrophyFragment.OnFragmentInteractionListener} interface
+ * {@link BadgeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TrophyFragment#newInstance} factory method to
+ * Use the {@link BadgeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrophyFragment extends DataFragment {
+public class BadgeFragment extends DataFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +33,7 @@ public class TrophyFragment extends DataFragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private static final String TAG = "TAG_TROPHY";
+    private static final String TAG = "TAG_BADGE";
 
     private SharedPreferences sharedPref;
     int dailyChallenge;
@@ -42,7 +41,7 @@ public class TrophyFragment extends DataFragment {
     ImageView imgBadge, imgBadgeDaily;
 
 
-    public TrophyFragment() {
+    public BadgeFragment() {
         // Required empty public constructor
     }
 
@@ -52,11 +51,11 @@ public class TrophyFragment extends DataFragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TrophyFragment.
+     * @return A new instance of fragment BadgeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TrophyFragment newInstance(String param1, String param2) {
-        TrophyFragment fragment = new TrophyFragment();
+    public static BadgeFragment newInstance(String param1, String param2) {
+        BadgeFragment fragment = new BadgeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,7 +76,7 @@ public class TrophyFragment extends DataFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_trophy, container, false);
+        View view = inflater.inflate(R.layout.fragment_badge, container, false);
         view.setTag(TAG);
 
         // TODO: change layout background image if user has gotten a medal
@@ -149,12 +148,6 @@ public class TrophyFragment extends DataFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -121,18 +123,45 @@ public class WelcomeActivity extends AppCompatActivity {
         String height = editHeight.getText().toString();
         String weight = editWeight.getText().toString();
 
-        //push creates a unique id in database
-        userRef.child("nickname").setValue(nickname);
-        userRef.child("gender").setValue(gender);
-        userRef.child("dateOfBirth").setValue(dateOfBirth);
-        userRef.child("height").setValue(height);
-        userRef.child("weight").setValue(weight);
-        for(int i = 0; i < 24; i++){
-            userRef.child("medals").child(String.valueOf(i)).setValue(0);
+        if(TextUtils.isEmpty(nickname)) {
+            editNickname.setError("This field is required");
+            //Toast message please enter the username or pwd
+            Toast.makeText(this, "You did not enter a nickname", Toast.LENGTH_SHORT).show();
+            return;
+        }else if (nickname.contains(",")|| nickname.contains(";")) {
+            //Toast message please enter the username or pwd
+            Toast.makeText(this, "Nickname can't contain any of the following characters:,;", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(gender)) {
+            //Toast message please enter the username or pwd
+            Toast.makeText(this, "You did not select a gender", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(dateOfBirth)) {
+            //Toast message please enter the username or pwd
+            Toast.makeText(this, "You did not select a date of birth", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(height)) {
+            //Toast message please enter the username or pwd
+            Toast.makeText(this, "You did not enter your height", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(weight)) {
+            //Toast message please enter the username or pwd
+            Toast.makeText(this, "You did not enter your weight", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            //push creates a unique id in database
+            userRef.child("nickname").setValue(nickname);
+            userRef.child("gender").setValue(gender);
+            userRef.child("dateOfBirth").setValue(dateOfBirth);
+            userRef.child("height").setValue(height);
+            userRef.child("weight").setValue(weight);
+            for(int i = 0; i < 24; i++){
+                userRef.child("medals").child(String.valueOf(i)).setValue(0);
+            }
+            userRef.child("score").setValue(0);
+            startActivity(new Intent(WelcomeActivity.this, TutorialActivity.class));
+            finish();
         }
-        userRef.child("score").setValue(0);
-        startActivity(new Intent(WelcomeActivity.this, TutorialActivity.class));
-        finish();
     }
 
     //  viewpager change listener

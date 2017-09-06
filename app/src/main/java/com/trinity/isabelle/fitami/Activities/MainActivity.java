@@ -25,10 +25,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.trinity.isabelle.fitami.Fragments.BadgeFragment;
 import com.trinity.isabelle.fitami.Fragments.HomeFragment;
 import com.trinity.isabelle.fitami.Fragments.LeaderboardFragment;
 import com.trinity.isabelle.fitami.Fragments.ProfileFragment;
-import com.trinity.isabelle.fitami.Fragments.TrophyFragment;
 import com.trinity.isabelle.fitami.Other.DataFragment;
 import com.trinity.isabelle.fitami.Other.FitamiBackgroundService;
 import com.trinity.isabelle.fitami.R;
@@ -37,13 +37,10 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private long lastTime,lastSteps,lastMeters;
-    private String nickname,email;
 
     private NavigationView navigationView;
     private Toolbar toolbar;
     private DrawerLayout drawer;
-    private View navHeader;
     private TextView txtName, txtEmail;
 
     // index to identify current nav menu item
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
     private static final String TAG_PROFILE = "profile";
-    private static final String TAG_TROPHY = "trophy";
+    private static final String TAG_BADGE = "badge";
     private static final String TAG_LEADERBOARD = "leaderboard";
     public static String CURRENT_TAG = TAG_HOME;
 
@@ -79,10 +76,9 @@ public class MainActivity extends AppCompatActivity
                 SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
                 float lastLatitude = sharedPref.getFloat(getString(R.string.preference_latitude_key), 0.0f);
                 float lastLongitude = sharedPref.getFloat(getString(R.string.preference_longitude_key), 0.0f);
-                lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
-                lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
-                lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
-                nickname = sharedPref.getString(getString(R.string.preference_nickname_key), "...");
+                long lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
+                long lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
+                long lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
                 //getHomeFragment().setFragmentData();
                 if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
                     ((DataFragment)getSupportFragmentManager().findFragmentByTag(CURRENT_TAG)).setFragmentData();
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         //Navigation view header
-        navHeader = navigationView.getHeaderView(0);
+        View navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.name);
         txtEmail = (TextView) navHeader.findViewById(R.id.email);
 
@@ -139,7 +135,7 @@ public class MainActivity extends AppCompatActivity
     private void loadNavHeader() {
         // name, email
         SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
-        nickname = sharedPref.getString(getString(R.string.preference_nickname_key), "Fitami User");
+        String nickname = sharedPref.getString(getString(R.string.preference_nickname_key), "Fitami User");
         String email = sharedPref.getString(getString(R.string.preference_email_key), "user@mail.com");
         txtName.setText(nickname);
         txtEmail.setText(email);
@@ -186,7 +182,6 @@ public class MainActivity extends AppCompatActivity
             mHandler.post(mPendingRunnable);
         }
 
-
         //Closing drawer on item click
         drawer.closeDrawers();
 
@@ -205,9 +200,9 @@ public class MainActivity extends AppCompatActivity
                 ProfileFragment profileFragment = new ProfileFragment();
                 return profileFragment;
             case 2:
-                // trophy room fragment
-                TrophyFragment trophyFragment = new TrophyFragment();
-                return trophyFragment;
+                // badge fragment
+                BadgeFragment badgeFragment = new BadgeFragment();
+                return badgeFragment;
             case 3:
                 // leaderboard fragment
                 LeaderboardFragment leaderboardFragment = new LeaderboardFragment();
@@ -243,9 +238,9 @@ public class MainActivity extends AppCompatActivity
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_PROFILE;
                         break;
-                    case R.id.nav_trophy:
+                    case R.id.nav_badge:
                         navItemIndex = 2;
-                        CURRENT_TAG = TAG_TROPHY;
+                        CURRENT_TAG = TAG_BADGE;
                         break;
                     case R.id.nav_leaderboard:
                         navItemIndex = 3;
@@ -274,13 +269,15 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                // Code here will be triggered once the drawer closes
+                // as we dont want anything to happen so we leave this blank
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                // Code here will be triggered once the drawer open
+                // as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
             }
         };
@@ -318,11 +315,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-
-        // show menu only when home fragment is selected
-        if (navItemIndex == 0) {
-            getMenuInflater().inflate(R.menu.main, menu);
-        }
         return true;
     }
 
@@ -361,7 +353,7 @@ public class MainActivity extends AppCompatActivity
             // Handle the profile action
         } else if (id == R.id.nav_profile) {
 
-        } else if (id == R.id.nav_trophy) {
+        } else if (id == R.id.nav_badge) {
 
         } else if (id == R.id.nav_leaderboard) {
 
