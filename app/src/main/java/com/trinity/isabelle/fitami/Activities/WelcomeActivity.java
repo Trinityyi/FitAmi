@@ -219,7 +219,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         final NumberPicker month = (NumberPicker) mView.findViewById(R.id.monthPicker);
                         alertDialogBuilderUserInput
                                 .setCancelable(false)
-                                .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         String content = month.getValue()+"/"+year.getValue(); //gets you the contents of edit text
                                         editBirth.setText(content); //displays it in a textview..
@@ -259,7 +259,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         final NumberPicker cm = (NumberPicker) mView.findViewById(R.id.heightPicker);
                         alertDialogBuilderUserInput
                                 .setCancelable(false)
-                                .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         String content = cm.getValue()+" cm"; //gets you the contents of edit text
                                         editHeight.setText(content); //displays it in a textview..
@@ -296,7 +296,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         final NumberPicker gram = (NumberPicker) mView.findViewById(R.id.gramPicker);
                         alertDialogBuilderUserInput
                                 .setCancelable(false)
-                                .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         String content = kilo.getValue()+"."+gram.getValue()+" kg"; //gets you the contents of edit text
                                         editWeight.setText(content); //displays it in a textview..

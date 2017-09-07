@@ -1,42 +1,36 @@
 <resources>
-    <string name="app_name">FitAmi</string>
+    <string name="app_name" translatable="false">FitAmi</string>
 
-    <string name="preference_master_key">com.trinity.isabelle.fitami.preferences</string>
-    <string name="preference_time_key">com.trinity.isabelle.fitami.preferences.key.time</string>
-    <string name="preference_step_key">com.trinity.isabelle.fitami.preferences.key.step</string>
-    <string name="preference_meter_key">com.trinity.isabelle.fitami.preferences.key.meter</string>
-    <string name="preference_latitude_key">com.trinity.isabelle.fitami.preferences.key.latitude</string>
-    <string name="preference_longitude_key">com.trinity.isabelle.fitami.preferences.key.longitude</string>
-    <string name="preference_uid_key">com.trinity.isabelle.fitami.preferences.key.user</string>
-    <string name="preference_date_key">com.trinity.isabelle.fitami.preferences.key.date</string>
-    <string name="preference_nickname_key">com.trinity.isabelle.fitami.preferences.key.nickname</string>
-    <string name="preference_points_key">com.trinity.isabelle.fitami.preferences.key.points</string>
-    <string name="preference_timestamp_key">com.trinity.isabelle.fitami.preferences.key.timestamp</string>
-    <string name="preference_medal_key">com.trinity.isabelle.fitami.preferences.key.medal</string>
-    <string name="preference_daily_medal_key">com.trinity.isabelle.fitami.preferences.key.medal.daily</string>
-    <string name="preference_daily_challenge_key">com.trinity.isabelle.fitami.preferences.key.challenge</string>
-    <string name="preference_total_score_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.score</string>
-    <string name="preference_daily_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily</string>
-    <string name="preference_daily_user_leaderboard_key">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily.user</string>
-    <string name="preference_email_key">com.trinity.isabelle.fitami.preferences.key.email</string>
+    <string name="preference_master_key" translatable="false">com.trinity.isabelle.fitami.preferences</string>
+    <string name="preference_time_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.time</string>
+    <string name="preference_step_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.step</string>
+    <string name="preference_meter_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.meter</string>
+    <string name="preference_latitude_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.latitude</string>
+    <string name="preference_longitude_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.longitude</string>
+    <string name="preference_uid_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.user</string>
+    <string name="preference_date_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.date</string>
+    <string name="preference_nickname_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.nickname</string>
+    <string name="preference_points_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.points</string>
+    <string name="preference_timestamp_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.timestamp</string>
+    <string name="preference_medal_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.medal</string>
+    <string name="preference_daily_medal_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.medal.daily</string>
+    <string name="preference_daily_challenge_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.challenge</string>
+    <string name="preference_total_score_leaderboard_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.leaderboard.score</string>
+    <string name="preference_daily_leaderboard_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily</string>
+    <string name="preference_daily_user_leaderboard_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.leaderboard.daily.user</string>
+    <string name="preference_email_key" translatable="false">com.trinity.isabelle.fitami.preferences.key.email</string>
 
-    <string name="intent_service_string_extra">com.trinity.isabelle.fitami.backgroundservice</string>
-
-    <string name="title_activity_main">MainActivity</string>
+    <string name="intent_service_string_extra" translatable="false">com.trinity.isabelle.fitami.backgroundservice</string>
 
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="openDrawer">open_drawer</string>
-    <string name="closeDrawer">close_drawer</string>
-
-    <string name="action_settings">Settings</string>
+    <string name="openDrawer" translatable="false">open_drawer</string>
+    <string name="closeDrawer" translatable="false">close_drawer</string>
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_home">Home</string>
-    <string name="nav_profile">Profile</string>
+    <string name="nav_home" translatable="false">Home</string>
+    <string name="profile">Profile</string>
     <string name="nav_badge">Activity Badges</string>
-    <string name="nav_leaderboard">Leaderboard</string>
+    <string name="nav_leaderboard" translatable="false">Leaderboard</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
@@ -48,7 +42,7 @@
 
     // Slide
     <string name="next">NEXT</string>
-    <string name="skip">SKIP</string>
+    <string name="skip" translatable="false">SKIP</string>
     <string name="start">START</string>
 
     // Welcome slide
@@ -57,20 +51,19 @@
         Exercise daily, earn medals, complete challenges and participate in daily leaderboards</string>
 
     // Settings Slide
-    <string name="field_required">This field is required</string>
-    <string name="no_nickname">You did not enter a nickname</string>
+    <string name="field_required">This field is required!</string>
+    <string name="no_nickname">You did not enter a nickname!</string>
     <string name="nickname_invalid">Nickname can\'t contain any of the following characters:,;</string>
-    <string name="no_gender">You did not select a gender</string>
-    <string name="no_birth">You did not select a date of birth</string>
-    <string name="no_height">You did not enter your height</string>
-    <string name="no_weight">You did not enter your weight</string>
-    <string name="dialog_save">Save</string>
+    <string name="no_gender">You did not select a gender!</string>
+    <string name="no_birth">You did not select a date of birth!</string>
+    <string name="no_height">You did not enter your height!</string>
+    <string name="no_weight">You did not enter your weight!</string>
+    <string name="dialog_ok" translatable="false">OK</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="welcome_profile">Profile</string>
     <string name="welcome_desc">Enter your personal info for more accurate analysis</string>
 
     // Profile
-    <string name="nickname">Nickname</string>
+    <string name="nickname" translatable="false">Nickname</string>
     <string name="enter_something">Enter Something</string>
     <string name="gender">Gender</string>
     <string name="date_of_birth">Date of Birth</string>
@@ -111,9 +104,9 @@
     <string name="daily_challenge_medal_completed"> (Completed)</string>
     <string name="my_rank">My Rank:</string>
     <string name="my_points">My Points:</string>
-    <string name="_3">#3</string>
-    <string name="_1">#1</string>
-    <string name="_2">#2</string>
+    <string name="_3" translatable="false">#3</string>
+    <string name="_1" translatable="false">#1</string>
+    <string name="_2" translatable="false">#2</string>
     <string name="steps">%1$d steps</string>
     <string name="distance" formatted="false">%.1f km</string>
     <string name="time" formatted="false">%.1f minutes</string>
@@ -132,6 +125,8 @@
     </string-array>
 
     //Leaderboard
+    <string name="steps_string">%1$s steps</string>
     <string name="hours" formatted="false">%.1f hours</string>
     <string name="score" formatted="false">Score: </string>
+
 </resources>

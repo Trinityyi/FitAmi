@@ -110,35 +110,21 @@ public class LeaderboardAdaper extends BaseAdapter implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
-    // checks the match for the dataId and adds to the filterlist
+            // checks the match for the dataId and adds to the filterlist
             long dataId = Long.parseLong(constraint.toString());
             FilterResults results = new FilterResults();
 
             if (dataId >= 0) {
                 ArrayList<LeaderboardFragment.Leaderboard> filterList = new ArrayList<>();
-                int newData;
-                for (int i = 0; i < leaderboardFilterList.size(); i++) {
+                Integer newData;
 
-                    if ( (leaderboardFilterList.get(i).getDataId() ) == dataId) {
+                    for (int i = 0; i < leaderboardFilterList.size(); i++) {
+                        if ( (leaderboardFilterList.get(i).getDataId() ) == dataId) {
 
-                        LeaderboardFragment.Leaderboard lbData = leaderboardFilterList.get(i);
-                        switch (((int) dataId)) {
-                            case 0: // steps
-                                newData = Integer.valueOf(lbData.getData());
-                                lbData.setData(String.format(context.getResources().getString(R.string.steps),newData));
-                                break;
-                            case 1: // distance
-                                newData = Integer.valueOf(lbData.getData());
-                                lbData.setData(String.format(context.getResources().getString(R.string.distance),newData/1000.0));
-                                break;
-                            case 2: // time
-                                newData = Integer.valueOf(lbData.getData());
-                                lbData.setData(String.format(context.getResources().getString(R.string.hours),newData/3600.0));
-                                break;
+                            LeaderboardFragment.Leaderboard lbData = leaderboardFilterList.get(i);
+                            filterList.add(lbData);
                         }
-                        filterList.add(lbData);
                     }
-                }
 
                 results.count = filterList.size();
                 results.values = filterList;

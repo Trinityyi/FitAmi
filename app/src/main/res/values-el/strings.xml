@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FitAmi</string>
+    <string name="daily_active_time">Ημερήσια ώρα δραστηριότητας</string>
+    <string name="daily_challenge">Ημερήσια πρόκληση</string>
+    <string name="daily_challenge_medal">Φτάσε %1$s και κέρδισε μπόνους πόντους!</string>
+    <string name="daily_challenge_medal_completed">(Ολοκληρώθηκε)</string>
+    <string name="daily_distance">Ημερήσια απόσταση</string>
+    <string name="daily_steps">Καθημερινά βήματα</string>
+    <string name="date_of_birth">Ημερομηνία γέννησης</string>
+    <string name="dialog_cancel">Άκυρο</string>
+    <string name="distance">%.1f χλμ</string>
+    <string name="enter_something">Εισάγετε κάτι</string>
+    <string name="field_required">Αυτό το πεδίο απαιτείται!</string>
+    <string name="gender">Φύλο</string>
+    <string name="height">Υψος</string>
+    <string name="hours">%.1f ώρες</string>
+    <string name="my_points">Πόντοι μου:</string>
+    <string name="my_rank">Η κατάταξή μου:</string>
+    <string name="nav_badge">Μετάλλια δραστηριότητας</string>
+    <string name="profile">Προφίλ</string>
+    <string name="next">ΕΠΟΜΕΝΟ</string>
+    <string name="nickname_invalid">Το nickname δεν μπορεί να περιέχει κανέναν από τους ακόλουθους χαρακτήρες:,;</string>
+    <string name="no_birth">Δεν επιλέξατε ημερομηνία γέννησης!</string>
+    <string name="no_gender">Δεν επιλέξατε φύλο!</string>
+    <string name="slide_1_title">Καλώς ήρθατε στο FitAmi!</string>
+    <string name="start">ΕΚΚΙΝΗΣΗ</string>
+    <string name="no_height">Δεν επιλέξατε το ύψος σας!</string>
+    <string name="no_nickname">Δεν επιλέξατε το nickname σας!</string>
+    <string name="no_weight">Δεν επιλέξατε το βάρος σας!</string>
+    <string name="points">%1$s πόντοι</string>
+    <string name="score">Σκορ:</string>
+    <string name="slide_1_desc">Μια σύγχρονη κοινωνική εφαρμογή παρακολουθήσεις καθημερινής δραστηριότητας. Ασκηθείτε καθημερινά, κερδίστε μετάλλια, ολοκληρώστε προκλήσεις και συμμετέχετε στο καθημερινό πίνακα κατάταξης.</string>
+    <string name="steps">%1$d βήματα</string>
+    <string name="steps_string">%1$s βήματα</string>
+    <string name="time">%.1f λεπτά</string>
+    <string name="tut_1_desc">Ασκηθείτε καθημερινά, κερδίστε μετάλλια, ολοκληρώστε προκλήσεις</string>
+    <string name="tut_1_title">Μετάλλια και προκλήσεις</string>
+    <string name="tut_2_desc">Συμμετέχετε στο καθημερινό πίνακα κατάταξης</string>
+    <string name="tut_2_title">Καθημερινό πίνακα κατάταξης</string>
+    <string name="weight">Βάρος</string>
+    <string name="welcome_desc">Εισάγετε τα στοιχεία σας για πιο ακριβή ανάλυση</string>
+
+    <string-array name="badge_array">
+        <item>5k βήματα</item>
+        <item>10k βήματα</item>
+        <item>20k βήματα</item>
+        <item>25k βήματα</item>
+        <item>5 χλμ</item>
+        <item>10 χλμ</item>
+        <item>20 χλμ</item>
+        <item>25 χλμ</item>
+        <item>30 λεπτά</item>
+        <item>60 λεπτά</item>
+        <item>90 λεπτά</item>
+        <item>120 λεπτά</item>
+    </string-array>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Προφίλ</item>
+        <item>Μετάλλια δραστηριότητας</item>
+        <item>Leaderboard</item>
+    </string-array>
+
+    // Spinner gender
+    <string-array name="gender_array">
+        <item>Άνδρας</item>
+        <item>Γυναίκα</item>
+    </string-array>
+
+    // Spinner leaderbard
+    <string-array name="leaderboard_array">
+        <item>Βήματα</item>
+        <item>Απόσταση</item>
+        <item>Ενεργό χρόνο</item>
+    </string-array>
+</resources>

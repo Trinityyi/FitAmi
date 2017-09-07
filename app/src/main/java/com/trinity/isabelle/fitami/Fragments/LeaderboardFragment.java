@@ -259,7 +259,17 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
                 leaderboard.setDataId(i);
                 leaderboard.setRank(String.valueOf(j+1));
                 leaderboard.setUserNickname(item[j+j]);
-                leaderboard.setData(item[j+j+1]);
+                switch (i) {
+                    case 0:
+                        leaderboard.setData(String.format(context.getResources().getString(R.string.steps_string),item[j+j+1]));
+                        break;
+                    case 1:
+                        leaderboard.setData(String.format(context.getResources().getString(R.string.distance),Double.valueOf(item[j+j+1])/1000));
+                        break;
+                    case 2:
+                        leaderboard.setData(String.format(context.getResources().getString(R.string.hours),Double.valueOf(item[j+j+1])/3600));
+                        break;
+                }
                 leaderboardEntityList.add(leaderboard);
             }
         }
@@ -271,12 +281,6 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
