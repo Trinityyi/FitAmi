@@ -9,8 +9,8 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="6dp"
     app:contentPadding="10dp">
 
     <RelativeLayout
@@ -21,38 +21,34 @@
             android:id="@+id/rankLayout"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_centerHorizontal="false"
-            android:layout_centerVertical="false"
             android:layout_marginBottom="16dp"
+            android:paddingStart="0dp"
             android:paddingEnd="16dp">
 
             <TextView
                 android:id="@+id/userRankTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="false"
                 android:layout_alignParentStart="true"
-                android:text="My Rank:"
-                android:textSize="20dp" />
+                android:text="@string/my_rank"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/userRank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignRight="@+id/userRankTxt"
-                android:text="1"
-                android:textSize="20dp" />
+                android:layout_alignEnd="@+id/userRankTxt"
+                android:textSize="20sp" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/scoreLayout"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="false"
             android:layout_marginBottom="16dp"
-            android:layout_toRightOf="@+id/rankLayout"
+            android:layout_toEndOf="@+id/rankLayout"
+            android:paddingStart="0dp"
             android:paddingEnd="16dp">
 
             <TextView
@@ -60,26 +56,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:text="My Points:"
-                android:textSize="20dp" />
+                android:text="@string/my_points"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/userScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentRight="false"
-                android:layout_alignRight="@+id/userScoreTxt"
-                android:text="50"
-                android:textSize="20dp" />
+                android:layout_alignEnd="@+id/userScoreTxt"
+                android:textSize="20sp" />
         </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/scoreLayout"
-            android:background="#000" />
+            android:background="@color/colorDivider" />
 
         <RelativeLayout
             android:id="@+id/pointLeaderboard"
@@ -93,7 +86,7 @@
                 android:layout_width="116dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp"
-                android:layout_toRightOf="@+id/firstPlace">
+                android:layout_toEndOf="@+id/firstPlace">
 
                 <ImageView
                     android:id="@+id/thirdProfile"
@@ -110,16 +103,15 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/thirdProfile"
                     android:layout_centerHorizontal="true"
-                    android:text="#3"
-                    android:textSize="16dp"/>
+                    android:text="@string/_3"
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/thirdNicknameEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/thirdRankTxt"
-                    android:layout_centerHorizontal="true"
-                    android:text="nickname" />
+                    android:layout_centerHorizontal="true"/>
 
                 <TextView
                     android:id="@+id/thirdPointsEdit"
@@ -127,15 +119,14 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/thirdNicknameEdit"
                     android:layout_centerHorizontal="true"
-                    android:text="points"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/firstPlace"
                 android:layout_width="116dp"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/secondPlace">
+                android:layout_toEndOf="@+id/secondPlace">
 
                 <ImageView
                     android:id="@+id/firstProfile"
@@ -153,16 +144,15 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/firstProfile"
                     android:layout_centerHorizontal="true"
-                    android:text="#1"
-                    android:textSize="16dp"/>
+                    android:text="@string/_1"
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/firstNicknameEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/firstRankTxt"
-                    android:layout_centerHorizontal="true"
-                    android:text="nickname" />
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:id="@+id/firstPointsEdit"
@@ -170,8 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/firstNicknameEdit"
                     android:layout_centerHorizontal="true"
-                    android:text="points"
-                    android:textSize="18dp"/>
+                    android:textSize="18sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -195,16 +184,15 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/secondProfile"
                     android:layout_centerHorizontal="true"
-                    android:text="#2"
-                    android:textSize="16dp"/>
+                    android:text="@string/_2"
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/secondNicknameEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/secondRankTxt"
-                    android:layout_centerHorizontal="true"
-                    android:text="nickname" />
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:id="@+id/secondPointsEdit"
@@ -212,8 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/secondNicknameEdit"
                     android:layout_centerHorizontal="true"
-                    android:text="points"
-                    android:textSize="18dp"/>
+                    android:textSize="18sp"/>
             </RelativeLayout>
         </RelativeLayout>
 

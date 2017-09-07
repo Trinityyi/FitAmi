@@ -8,8 +8,8 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="6dp"
     app:contentPadding="10dp">
 
     <RelativeLayout
@@ -20,27 +20,28 @@
             android:id="@+id/challengeImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:src="@mipmap/trophy" />
 
         <TextView
             android:id="@+id/challengeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="false"
+            android:layout_alignParentEnd="false"
             android:layout_marginBottom="10dp"
-            android:layout_toRightOf="@+id/challengeImage"
-            android:text="Daily Challenge"
-            android:textSize="20dp" />
+            android:layout_toEndOf="@+id/challengeImage"
+            android:text="@string/daily_challenge"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/challengeEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/challengeText"
-            android:layout_toRightOf="@+id/challengeImage"
-            android:text="Reach 10000 steps and earn bonus points!!!"
-            android:textSize="18dp" />
+            android:layout_toEndOf="@+id/challengeImage"
+            android:text="@string/daily_challenge_medal"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 

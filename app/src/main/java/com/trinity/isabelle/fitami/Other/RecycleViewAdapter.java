@@ -1,6 +1,7 @@
 package com.trinity.isabelle.fitami.Other;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,13 @@ import com.trinity.isabelle.fitami.R;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    Context context;
     private int steps;
     private double distance,time;
     private String top3Leaderboard, dailyChallenge;
 
-    public RecycleViewAdapter(Long _steps, Long _distance, Long _time, String _dailyChallenge, String _top3Leaderboard) {
+    public RecycleViewAdapter(Context _context,Long _steps, Long _distance, Long _time, String _dailyChallenge, String _top3Leaderboard) {
+        this.context=_context;
         this.steps=(int)(long)_steps;
         this.distance=(double) (_distance/1000.0);
         this.time=(double)(_time/60.0);
@@ -95,11 +98,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case 1: // Stats
                 StatsViewHolder statsViewHolder = (StatsViewHolder)holder;
                 statsViewHolder.stepsBar.setProgress(steps);
-                statsViewHolder.stepsText.setText(steps+" steps");
+                statsViewHolder.stepsText.setText(String.format(context.getResources().getString(R.string.steps),steps));
                 statsViewHolder.distanceBar.setProgress((int)distance);
-                statsViewHolder.distanceText.setText(distance+" km");
+                statsViewHolder.distanceText.setText(String.format(context.getResources().getString(R.string.distance),distance));
                 statsViewHolder.timeBar.setProgress((int)time);
-                statsViewHolder.timeText.setText(String.format("%.1f", time)+" minutes");
+                statsViewHolder.timeText.setText(String.format(context.getResources().getString(R.string.time),time));
                 break;
             case 2: // Challenge
                 ChallengeViewHolder challengeViewHolder = (ChallengeViewHolder)holder;
@@ -109,11 +112,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 LeaderboardViewHolder leaderboardViewHolder = (LeaderboardViewHolder)holder;
                 String[] items = top3Leaderboard.split(",");
                 leaderboardViewHolder.firstNickname.setText(items[0]);
-                leaderboardViewHolder.firstPoints.setText(items[1]+" points");
+                leaderboardViewHolder.firstPoints.setText(String.format(context.getResources().getString(R.string.points),items[1]));
                 leaderboardViewHolder.secondNickname.setText(items[2]);
-                leaderboardViewHolder.secondPoints.setText(items[3]+" points");
+                leaderboardViewHolder.secondPoints.setText(String.format(context.getResources().getString(R.string.points),items[3]));
                 leaderboardViewHolder.thirdNickname.setText(items[4]);
-                leaderboardViewHolder.thirdPoints.setText(items[5]+" points");
+                leaderboardViewHolder.thirdPoints.setText(String.format(context.getResources().getString(R.string.points),items[5]));
                 leaderboardViewHolder.userRank.setText(items[6]);
                 leaderboardViewHolder.userScore.setText(items[7]);
                 break;

@@ -1,19 +1,12 @@
 package com.trinity.isabelle.fitami.Fragments;
 
-import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +15,6 @@ import com.trinity.isabelle.fitami.Other.RecycleViewAdapter;
 import com.trinity.isabelle.fitami.R;
 import com.trinity.isabelle.fitami.Other.DataFragment;
 
-import java.util.Objects;
 
 
 /**
@@ -46,12 +38,14 @@ public class HomeFragment extends DataFragment {
     private OnFragmentInteractionListener mListener;
     private static final String TAG = "TAG_HOME";
 
+    Context context;
+
     private SharedPreferences sharedPref;
 
     private long lastTime,lastSteps,lastMeters;
     private int dailyMedal;
     // #1 nickname, points , #2 nickname, points , #3 nickname, points, user rank, points
-    private String top3Leaderboard;
+    private String top3Leaderboard, dailyChallenge;
     protected RecyclerView recyclerView;
 
     public HomeFragment() {
@@ -92,6 +86,7 @@ public class HomeFragment extends DataFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         view.setTag(TAG);
+        context = getActivity();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -106,11 +101,12 @@ public class HomeFragment extends DataFragment {
         lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
         dailyMedal = sharedPref.getInt(getString(R.string.preference_daily_challenge_key), 0);
         top3Leaderboard = sharedPref.getString(getString(R.string.preference_total_score_leaderboard_key), "...,0,...,0,...,0,1,0");
-        String dailyChallenge = "Reach "+getResources().getStringArray(R.array.medals_array)[dailyMedal]+" and earn bonus points!";
+        dailyChallenge = String.format(getResources().getString(R.string.daily_challenge_medal),getResources().getStringArray(R.array.badge_array)[dailyMedal]);
+        // TODO: add completed to dailyChallenge
         if(sharedPref.getLong(getString(R.string.preference_daily_medal_key) + dailyMedal + 12, 0l) > 0l){
-            dailyChallenge += " (Completed)";
+            dailyChallenge +=  getResources().getString(R.string.daily_challenge_medal_completed);
         }
-        RecyclerView.Adapter adapter = new RecycleViewAdapter(lastSteps, lastMeters, lastTime, dailyChallenge, top3Leaderboard);
+        RecyclerView.Adapter adapter = new RecycleViewAdapter(context,lastSteps, lastMeters, lastTime, dailyChallenge, top3Leaderboard);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -118,6 +114,7 @@ public class HomeFragment extends DataFragment {
 
     public void setFragmentData(){
         if(!isAdded())  return;
+
         // Get the data from shared preferences to write on the card
         sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
         lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
@@ -125,12 +122,12 @@ public class HomeFragment extends DataFragment {
         lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
         dailyMedal = sharedPref.getInt(getString(R.string.preference_daily_challenge_key), 0);
         top3Leaderboard = sharedPref.getString(getString(R.string.preference_total_score_leaderboard_key), "...,0,...,0,...,0,1,0");
-
-        String dailyChallenge = "Reach "+getResources().getStringArray(R.array.medals_array)[dailyMedal]+" and earn bonus points!";
+        dailyChallenge = String.format(getResources().getString(R.string.daily_challenge_medal),getResources().getStringArray(R.array.badge_array)[dailyMedal]);
+        // TODO: add completed to dailyChallenge
         if(sharedPref.getLong(getString(R.string.preference_daily_medal_key) + dailyMedal + 12, 0l) > 0l){
-            dailyChallenge += " (Completed)";
+            dailyChallenge += getResources().getString(R.string.daily_challenge_medal_completed);
         }
-        RecyclerView.Adapter adapter = new RecycleViewAdapter(lastSteps, lastMeters, lastTime, dailyChallenge, top3Leaderboard);
+        RecyclerView.Adapter adapter = new RecycleViewAdapter(context,lastSteps, lastMeters, lastTime, dailyChallenge, top3Leaderboard);
         recyclerView.setAdapter(adapter);
     }
 
@@ -142,17 +139,11 @@ public class HomeFragment extends DataFragment {
         }
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        }
-//      else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
 
     @Override
     public void onDetach() {

@@ -46,7 +46,7 @@
         <item>Leaderboard</item>
     </string-array>
 
-    // SLIDE
+    // Slide
     <string name="next">NEXT</string>
     <string name="skip">SKIP</string>
     <string name="start">START</string>
@@ -62,16 +62,8 @@
         <item>Female</item>
     </string-array>
 
-    // Spinner leaderbard
-    <string-array name="leaderboard_array">
-        <item>Steps</item>
-        <item>Distance</item>
-        <item>Active time</item>
-    </string-array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string-array name="medals_array">
+    // Badge description
+    <string-array name="badge_array">
         <item>5k steps</item>
         <item>10k steps</item>
         <item>20k steps</item>
@@ -86,4 +78,25 @@
         <item>120 minutes</item>
     </string-array>
 
+    // Home Fragment
+    <string name="daily_challenge">Daily Challenge</string>
+    <string name="daily_challenge_medal">Reach %1$s and earn bonus points!</string>
+    <string name="daily_challenge_medal_completed"> (Completed)</string>
+    <string name="my_rank">My Rank:</string>
+    <string name="my_points">My Points:</string>
+    <string name="_3">#3</string>
+    <string name="_1">#1</string>
+    <string name="_2">#2</string>
+    <string name="steps">%1$d steps</string>
+    <string name="distance" formatted="false">%.1f km</string>
+    <string name="time" formatted="false">%.1f minutes</string>
+    <string name="points">%1$s points</string>
+
+    // Spinner leaderbard
+    <string-array name="leaderboard_array">
+        <item>Steps</item>
+        <item>Distance</item>
+        <item>Active time</item>
+    </string-array>
+    
 </resources>
