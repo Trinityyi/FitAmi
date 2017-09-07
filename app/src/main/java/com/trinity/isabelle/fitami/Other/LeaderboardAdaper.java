@@ -20,13 +20,15 @@ import java.util.List;
 
 public class LeaderboardAdaper extends BaseAdapter implements Filterable {
 
+    Context context;
     private List<LeaderboardFragment.Leaderboard> leaderboardList;
     private List<LeaderboardFragment.Leaderboard> leaderboardFilterList;
     private LeaderboardFilter leaderboardFilter;
 
-    public LeaderboardAdaper(List data){
-        this.leaderboardList = data;
-        this.leaderboardFilterList= data;
+    public LeaderboardAdaper(Context _context, List _data){
+        this.leaderboardList = _data;
+        this.leaderboardFilterList= _data;
+        this.context = _context;
     }
 
     @Override
@@ -114,11 +116,26 @@ public class LeaderboardAdaper extends BaseAdapter implements Filterable {
 
             if (dataId >= 0) {
                 ArrayList<LeaderboardFragment.Leaderboard> filterList = new ArrayList<>();
+                int newData;
                 for (int i = 0; i < leaderboardFilterList.size(); i++) {
 
                     if ( (leaderboardFilterList.get(i).getDataId() ) == dataId) {
 
                         LeaderboardFragment.Leaderboard lbData = leaderboardFilterList.get(i);
+                        switch (((int) dataId)) {
+                            case 0: // steps
+                                newData = Integer.valueOf(lbData.getData());
+                                lbData.setData(String.format(context.getResources().getString(R.string.steps),newData));
+                                break;
+                            case 1: // distance
+                                newData = Integer.valueOf(lbData.getData());
+                                lbData.setData(String.format(context.getResources().getString(R.string.distance),newData/1000.0));
+                                break;
+                            case 2: // time
+                                newData = Integer.valueOf(lbData.getData());
+                                lbData.setData(String.format(context.getResources().getString(R.string.hours),newData/3600.0));
+                                break;
+                        }
                         filterList.add(lbData);
                     }
                 }

@@ -10,7 +10,7 @@
     <color name="colorDivider">#BDBDBD</color>
 
     <!-- Screens background color-->
-    <color name="bg_screen1">#f64c73</color>
+    <color name="bg_screen1">#e0e0e0</color>
     <color name="bg_screen2">#20d2bb</color>
     <color name="bg_screen3">#e57373</color>
     <color name="bg_screen4">#c873f4</color>

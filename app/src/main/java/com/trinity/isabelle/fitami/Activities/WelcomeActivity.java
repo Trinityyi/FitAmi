@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -53,15 +52,13 @@ public class WelcomeActivity extends AppCompatActivity {
         rootRef.child("users/" + userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) { // if user not new, case where the data already exists
                     SharedPreferences sharedPref = WelcomeActivity.this.getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
                     sharedPref.edit().putString(getString(R.string.preference_uid_key), userId).apply();
-                    // TODO: handle the case where the data already exists
                     startActivity(new Intent(WelcomeActivity.this, TutorialActivity.class));
                     finish();
                 }
-                else {
-                    // TODO: handle the case where the data does not yet exist
+                else { // if user new, case where the data does not yet exist
                     setContentView(R.layout.activity_welcome);
 
                     viewPager = (ViewPager) findViewById(R.id.viewPagerWelcome);
@@ -87,7 +84,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             // checking for last page
-                            // if last page home screen will be launched
+                            // if last page tutorial screen will be launched
                             int current = getItem(+1);
                             if (current < layouts.length) {
                                 // move to next screen
@@ -107,8 +104,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private int getItem(int i) {
@@ -123,30 +118,25 @@ public class WelcomeActivity extends AppCompatActivity {
         String height = editHeight.getText().toString();
         String weight = editWeight.getText().toString();
 
+        // check form
         if(TextUtils.isEmpty(nickname)) {
-            editNickname.setError("This field is required");
-            //Toast message please enter the username or pwd
-            Toast.makeText(this, "You did not enter a nickname", Toast.LENGTH_SHORT).show();
+            editNickname.setError(getString(R.string.required_field));
+            Toast.makeText(this, getString(R.string.no_nickname), Toast.LENGTH_SHORT).show();
             return;
         }else if (nickname.contains(",")|| nickname.contains(";")) {
-            //Toast message please enter the username or pwd
-            Toast.makeText(this, "Nickname can't contain any of the following characters:,;", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.nickname_invalid), Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(gender)) {
-            //Toast message please enter the username or pwd
-            Toast.makeText(this, "You did not select a gender", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_gender), Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(dateOfBirth)) {
-            //Toast message please enter the username or pwd
-            Toast.makeText(this, "You did not select a date of birth", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_birth), Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(height)) {
-            //Toast message please enter the username or pwd
-            Toast.makeText(this, "You did not enter your height", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_height), Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(weight)) {
-            //Toast message please enter the username or pwd
-            Toast.makeText(this, "You did not enter your weight", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_weight), Toast.LENGTH_SHORT).show();
             return;
         } else {
             //push creates a unique id in database
@@ -210,13 +200,13 @@ public class WelcomeActivity extends AppCompatActivity {
             container.addView(view);
 
             if (position==layouts.length-1){
-                // TODO: Check if null, show toast message
                 editNickname = (EditText) view.findViewById(R.id.editNickname);
                 spinnerGender = (Spinner) view.findViewById(R.id.spinnerGender);
                 editBirth = (TextView) view.findViewById(R.id.editBirth);
                 editHeight = (TextView) view.findViewById(R.id.editHeight);
                 editWeight = (TextView) view.findViewById(R.id.editWeight);
 
+                // dialog for date of birth field
                 editBirth.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -229,14 +219,14 @@ public class WelcomeActivity extends AppCompatActivity {
                         final NumberPicker month = (NumberPicker) mView.findViewById(R.id.monthPicker);
                         alertDialogBuilderUserInput
                                 .setCancelable(false)
-                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         String content = month.getValue()+"/"+year.getValue(); //gets you the contents of edit text
                                         editBirth.setText(content); //displays it in a textview..
                                     }
                                 })
 
-                                .setNegativeButton("Cancel",
+                                .setNegativeButton(getString(R.string.dialog_cancel),
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialogBox, int id) {
                                                 dialogBox.cancel();
@@ -256,6 +246,8 @@ public class WelcomeActivity extends AppCompatActivity {
                         alertDialogAndroid.show();
                     }
                 });
+
+                // dialog for height field
                 editHeight.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -267,14 +259,14 @@ public class WelcomeActivity extends AppCompatActivity {
                         final NumberPicker cm = (NumberPicker) mView.findViewById(R.id.heightPicker);
                         alertDialogBuilderUserInput
                                 .setCancelable(false)
-                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         String content = cm.getValue()+" cm"; //gets you the contents of edit text
                                         editHeight.setText(content); //displays it in a textview..
                                     }
                                 })
 
-                                .setNegativeButton("Cancel",
+                                .setNegativeButton(getString(R.string.dialog_cancel),
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialogBox, int id) {
                                                 dialogBox.cancel();
@@ -291,6 +283,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 });
 
+                // dialog for weight field
                 editWeight.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -303,14 +296,14 @@ public class WelcomeActivity extends AppCompatActivity {
                         final NumberPicker gram = (NumberPicker) mView.findViewById(R.id.gramPicker);
                         alertDialogBuilderUserInput
                                 .setCancelable(false)
-                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         String content = kilo.getValue()+"."+gram.getValue()+" kg"; //gets you the contents of edit text
                                         editWeight.setText(content); //displays it in a textview..
                                     }
                                 })
 
-                                .setNegativeButton("Cancel",
+                                .setNegativeButton(getString(R.string.dialog_cancel),
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialogBox, int id) {
                                                 dialogBox.cancel();

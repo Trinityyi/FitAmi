@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.trinity.isabelle.fitami.Other.LeaderboardAdaper;
-import com.trinity.isabelle.fitami.Other.RecycleViewAdapter;
 import com.trinity.isabelle.fitami.R;
 import com.trinity.isabelle.fitami.Other.DataFragment;
 
@@ -46,6 +43,8 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
     private OnFragmentInteractionListener mListener;
     private static final String TAG = "TAG_LEADERBOARD";
 
+    Context context;
+
     private SharedPreferences sharedPref;
 
     // #1 nickname, steps,..,..; #1 nickname, distance,..,..;#1 nickname, time,..,..
@@ -64,7 +63,7 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
 
     public class Leaderboard {
         private long id;
-        private long dataId; // 0: steps, 1: distance, 2: time, 3: score
+        private long dataId; // 0: steps, 1: distance, 2: time
         private String rank;
         private String userNickname;
         private String data;
@@ -143,6 +142,7 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
         view.setTag(TAG);
+        context = getActivity();
 
         // Get the data from shared preferences to write on the card
         sharedPref = this.getActivity().getSharedPreferences(getString(R.string.preference_master_key), Context.MODE_PRIVATE);
@@ -159,7 +159,7 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
         leaderboardSpinner = (Spinner) view.findViewById(R.id.leaderboardSpinner);
         listView = (ListView) view.findViewById(R.id.leaderboardListView);
 
-        adapter = new LeaderboardAdaper(leaderboardEntityList);
+        adapter = new LeaderboardAdaper(context,leaderboardEntityList);
         listView.setAdapter(adapter);
 
         leaderboardSpinner.setOnItemSelectedListener(this);
@@ -184,20 +184,49 @@ public class LeaderboardFragment extends DataFragment implements AdapterView.OnI
         leaderboardSpinner = (Spinner) getView().findViewById(R.id.leaderboardSpinner);
         listView = (ListView) getView().findViewById(R.id.leaderboardListView);
 
-        adapter = new LeaderboardAdaper(leaderboardEntityList);
+        adapter = new LeaderboardAdaper(context,leaderboardEntityList);
         listView.setAdapter(adapter);
 
         leaderboardSpinner.setOnItemSelectedListener(this);
 
-    }
+        Integer dataId = leaderboardSpinner.getSelectedItemPosition();
+        String[] item = items[dataId].split(",");
+        userRank.setText(item[0]);
+        switch (dataId) {
+            case 0: // steps
+                userData.setText(String.format(context.getResources().getString(R.string.steps),Integer.valueOf(item[1])));
+                break;
+            case 1: // distance
+                userData.setText(String.format(context.getResources().getString(R.string.distance),Integer.valueOf(item[1])/1000.0));
+                break;
+            case 2: // time
+                userData.setText(String.format(context.getResources().getString(R.string.hours),Integer.valueOf(item[1])/3600.0));
+                break;
+        }
+        adapter.getFilter().filter(Integer.toString(dataId),new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
 
+            }
+        });
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Integer dataId = leaderboardSpinner.getSelectedItemPosition();
         String[] item = items[dataId].split(",");
         userRank.setText(item[0]);
-        userData.setText(item[1]);
+        switch (dataId) {
+            case 0: // steps
+                userData.setText(String.format(context.getResources().getString(R.string.steps),Integer.valueOf(item[1])));
+                break;
+            case 1: // distance
+                userData.setText(String.format(context.getResources().getString(R.string.distance),Integer.valueOf(item[1])/1000.0));
+                break;
+            case 2: // time
+                userData.setText(String.format(context.getResources().getString(R.string.hours),Integer.valueOf(item[1])/3600.0));
+                break;
+        }
         //Here we use the Filtering Feature which we implemented in our Adapter class.
         adapter.getFilter().filter(Integer.toString(dataId),new Filter.FilterListener() {
             @Override

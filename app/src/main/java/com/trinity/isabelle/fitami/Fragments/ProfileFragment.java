@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -123,14 +125,14 @@ public class ProfileFragment extends DataFragment {
                 final NumberPicker month = (NumberPicker) mView.findViewById(R.id.monthPicker);
                 alertDialogBuilderUserInput
                         .setCancelable(false)
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 String content = month.getValue()+"/"+year.getValue(); //gets you the contents of edit text
                                 editBirth.setText(content); //displays it in a textview..
                             }
                         })
 
-                        .setNegativeButton("Cancel",
+                        .setNegativeButton(getString(R.string.dialog_cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         dialogBox.cancel();
@@ -161,14 +163,14 @@ public class ProfileFragment extends DataFragment {
                 final NumberPicker cm = (NumberPicker) mView.findViewById(R.id.heightPicker);
                 alertDialogBuilderUserInput
                         .setCancelable(false)
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 String content = cm.getValue()+" cm"; //gets you the contents of edit text
                                 editHeight.setText(content); //displays it in a textview..
                             }
                         })
 
-                        .setNegativeButton("Cancel",
+                        .setNegativeButton(getString(R.string.dialog_cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         dialogBox.cancel();
@@ -197,14 +199,14 @@ public class ProfileFragment extends DataFragment {
                 final NumberPicker gram = (NumberPicker) mView.findViewById(R.id.gramPicker);
                 alertDialogBuilderUserInput
                         .setCancelable(false)
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.dialog_save), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 String content = kilo.getValue()+"."+gram.getValue()+" kg"; //gets you the contents of edit text
                                 editWeight.setText(content); //displays it in a textview..
                             }
                         })
 
-                        .setNegativeButton("Cancel",
+                        .setNegativeButton(getString(R.string.dialog_cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialogBox, int id) {
                                         dialogBox.cancel();
@@ -257,14 +259,37 @@ public class ProfileFragment extends DataFragment {
                 String height = editHeight.getText().toString();
                 String weight = editWeight.getText().toString();
 
-                //push creates a unique id in database
-                userRef.child("nickname").setValue(nickname);
-                userRef.child("gender").setValue(gender);
-                userRef.child("dateOfBirth").setValue(dateOfBirth);
-                userRef.child("height").setValue(height);
-                userRef.child("weight").setValue(weight);
+                // check form
+                if(TextUtils.isEmpty(nickname)) {
+                    editNickname.setError(getString(R.string.required_field));
+                    Toast.makeText(getActivity(), getString(R.string.no_nickname), Toast.LENGTH_SHORT).show();
+                    return;
+                }else if (nickname.contains(",")|| nickname.contains(";")) {
+                    Toast.makeText(getActivity(), getString(R.string.nickname_invalid), Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TextUtils.isEmpty(gender)) {
+                    Toast.makeText(getActivity(), getString(R.string.no_gender), Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TextUtils.isEmpty(dateOfBirth)) {
+                    Toast.makeText(getActivity(), getString(R.string.no_birth), Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TextUtils.isEmpty(height)) {
+                    Toast.makeText(getActivity(), getString(R.string.no_height), Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TextUtils.isEmpty(weight)) {
+                    Toast.makeText(getActivity(), getString(R.string.no_weight), Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
 
-                getActivity().onBackPressed();
+                    //push creates a unique id in database
+                    userRef.child("nickname").setValue(nickname);
+                    userRef.child("gender").setValue(gender);
+                    userRef.child("dateOfBirth").setValue(dateOfBirth);
+                    userRef.child("height").setValue(height);
+                    userRef.child("weight").setValue(weight);
+
+                    getActivity().onBackPressed();
+                }
             }
         });
 
@@ -272,7 +297,7 @@ public class ProfileFragment extends DataFragment {
     }
 
     public void setFragmentData(){
-        // TODO
+
     }
 
 
@@ -284,15 +309,9 @@ public class ProfileFragment extends DataFragment {
     }
 
 //    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     @Override
     public void onDetach() {

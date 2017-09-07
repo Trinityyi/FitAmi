@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen3">
+    android:background="@color/bg_screen1">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -42,7 +42,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="19dp"
             android:text="@string/slide_1_title"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/slide_title"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/textView3"
@@ -62,7 +62,7 @@
             android:paddingRight="@dimen/desc_padding"
             android:text="@string/slide_1_desc"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/slide_desc"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintLeft_toLeftOf="parent"

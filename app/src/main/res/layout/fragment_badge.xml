@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="Daily Steps"
-            android:textSize="20dp" />
+            android:text="@string/daily_steps"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:id="@+id/stepsMedals"
@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/stepsTV"
             android:layout_marginBottom="5dp"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -134,7 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/stepsMedals"
-            android:background="#546e7a" />
+            android:background="@color/colorDivider" />
 
         <TextView
             android:id="@+id/distanceTV"
@@ -143,8 +144,8 @@
             android:layout_below="@+id/stepsMedals"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="Daily Distance"
-            android:textSize="20dp" />
+            android:text="@string/daily_distance"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:id="@+id/distanceMedals"
@@ -152,6 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/distanceTV"
             android:layout_marginBottom="5dp"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -260,7 +262,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/distanceMedals"
-            android:background="#546e7a" />
+            android:background="@color/colorDivider" />
 
         <TextView
             android:id="@+id/timeTV"
@@ -269,14 +271,15 @@
             android:layout_below="@+id/distanceMedals"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="Daily Active Time"
-            android:textSize="20dp" />
+            android:text="@string/daily_active_time"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:id="@+id/timeMedals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/timeTV"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:weightSum="1">
 

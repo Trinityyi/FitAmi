@@ -47,8 +47,7 @@ public class TutorialActivity extends AppCompatActivity {
         btnNext = (Button) findViewById(R.id.btn_next);
 
 
-        // layouts of all welcome sliders
-        // add few more layouts if you want
+        // layouts of all tutorial sliders
         layouts = new int[]{
                 R.layout.tutorial_slide1,
                 R.layout.tutorial_slide2
@@ -93,7 +92,12 @@ public class TutorialActivity extends AppCompatActivity {
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("&#8226;"));
+            // version check, use the old method on Android M and below
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                dots[i].setText(Html.fromHtml("&#8226;",Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                dots[i].setText(Html.fromHtml("&#8226;"));
+            }
             dots[i].setTextSize(35);
             dots[i].setTextColor(colorsInactive[currentPage]);
             dotsLayout.addView(dots[i]);
@@ -121,9 +125,9 @@ public class TutorialActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
             addBottomDots(position);
 
-            // changing the next button text 'NEXT' / 'GOT IT'
+            // changing the next button text 'NEXT' / 'START'
             if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
+                // last page. make button text to START
                 btnNext.setText(getString(R.string.start));
                 btnSkip.setVisibility(View.GONE);
             } else {

@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_screen1"
     tools:context="com.trinity.isabelle.fitami.Fragments.ProfileFragment">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,15 +19,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:paddingBottom="5dp"
-            android:text="Enter your personal info for more accurate analysis"
+            android:text="@string/welcome_desc"
             android:textAlignment="center"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/fprofileDesc"
-            android:background="#000" />
+            android:background="@color/colorDivider" />
 
         <RelativeLayout
             android:id="@+id/flayerNickname"
@@ -42,24 +44,26 @@
                 android:id="@+id/ftxtNickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Nickname"
+                android:layout_alignParentStart="true"
+                android:text="@string/nickname"
                 android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/feditNickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:hint="Enter Something"
+                android:layout_alignParentEnd="true"
+                android:hint="@string/enter_something"
                 android:textSize="20sp" />
 
         </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/flayerNickname"
-            android:background="#000" />
+            android:background="@color/colorDivider" />
+
         <RelativeLayout
             android:id="@+id/flayerGender"
             android:layout_width="fill_parent"
@@ -74,15 +78,15 @@
                 android:id="@+id/ftxtGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Gender"
+                android:layout_alignParentStart="true"
+                android:text="@string/gender"
                 android:textSize="20sp" />
 
             <Spinner
                 android:id="@+id/fspinnerGender"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:entries="@array/gender_array"
                 android:textSize="20sp" />
 
@@ -92,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/flayerGender"
-            android:background="#000" />
+            android:background="@color/colorDivider" />
 
         <RelativeLayout
             android:id="@+id/flayerBirth"
@@ -108,16 +112,16 @@
                 android:id="@+id/ftxtBirth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Date of Birth"
+                android:layout_alignParentStart="true"
+                android:text="@string/date_of_birth"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/feditBirth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:hint="Enter Something"
+                android:layout_alignParentEnd="true"
+                android:hint="@string/enter_something"
                 android:textSize="20sp" />
 
         </RelativeLayout>
@@ -126,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/flayerBirth"
-            android:background="#000" />
+            android:background="@color/colorDivider" />
 
         <RelativeLayout
             android:id="@+id/flayerHeight"
@@ -142,16 +146,16 @@
                 android:id="@+id/ftxtHeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Height"
+                android:layout_alignParentStart="true"
+                android:text="@string/height"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/feditHeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:hint="Enter Something"
+                android:layout_alignParentEnd="true"
+                android:hint="@string/enter_something"
                 android:textSize="20sp" />
 
         </RelativeLayout>
@@ -160,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/flayerHeight"
-            android:background="#000" />
+            android:background="@color/colorDivider" />
 
         <RelativeLayout
             android:id="@+id/flayerWeight"
@@ -176,16 +180,16 @@
                 android:id="@+id/ftxtWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Weight"
+                android:layout_alignParentStart="true"
+                android:text="@string/weight"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/feditWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:hint="Enter Something"
+                android:layout_alignParentEnd="true"
+                android:hint="@string/enter_something"
                 android:textSize="20sp" />
 
         </RelativeLayout>
@@ -194,16 +198,16 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@+id/flayerWeight"
-            android:background="#000" />
+            android:background="@color/colorDivider" />
 
         <Button
             android:id="@+id/btnSaveProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:elevation="1dp"
-            android:text="Save" />
+            android:text="@string/button_text_save" />
     </RelativeLayout>
 
 
