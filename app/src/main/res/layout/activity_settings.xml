@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_screen1"
@@ -27,7 +26,8 @@
         android:paddingBottom="5dp"
         android:text="@string/welcome_desc"
         android:textAlignment="center"
-        android:textColor="@color/colorSecondaryText" />
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
@@ -35,36 +35,35 @@
         android:layout_below="@+id/profileDesc"
         android:background="@color/colorDivider" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layerNickname"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profileTitle"
+        android:layout_below="@+id/profileDesc"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="20dp">
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/txtNickname"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_weight="0.5"
             android:text="@string/nickname"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editNickname"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5"
             android:hint="@string/enter_something"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -72,34 +71,34 @@
         android:layout_below="@+id/layerNickname"
         android:background="@color/colorDivider" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layerGender"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layerNickname"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/txtGender"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_weight="0.5"
             android:text="@string/gender"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/spinnerGender"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5"
             android:entries="@array/gender_array"
             android:textSize="20sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -107,7 +106,7 @@
         android:layout_below="@+id/layerGender"
         android:background="@color/colorDivider" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layerBirth"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -115,27 +114,28 @@
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/txtBirth"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_weight="0.5"
             android:text="@string/date_of_birth"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/editBirth"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5"
             android:hint="@string/enter_something"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -143,35 +143,35 @@
         android:layout_below="@+id/layerBirth"
         android:background="@color/colorDivider" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layerHeight"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layerBirth"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/txtHeight"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_weight="0.5"
             android:text="@string/height"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/editHeight"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5"
             android:hint="@string/enter_something"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -179,35 +179,35 @@
         android:layout_below="@+id/layerHeight"
         android:background="@color/colorDivider" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layerWeight"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layerHeight"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/txtWeight"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_weight="0.5"
             android:text="@string/weight"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/editWeight"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5"
             android:hint="@string/enter_something"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

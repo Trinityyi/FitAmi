@@ -41,8 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="0.5"
-        android:textSize="25sp"
-        android:textStyle="bold"/>
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/listitemData"
@@ -50,6 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="0.25"
-        android:textSize="25sp"/>
+        android:textSize="22sp" />
 
 </LinearLayout>

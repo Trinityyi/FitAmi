@@ -14,7 +14,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="260dp">
 
         <RelativeLayout
             android:id="@+id/stepsLayout"
@@ -49,7 +49,7 @@
         <RelativeLayout
             android:id="@+id/distanceLayout"
             android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_height="105dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:background="@mipmap/ic_location_on_black_48dp">
@@ -80,7 +80,7 @@
         <RelativeLayout
             android:id="@+id/timeLayout"
             android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_height="105dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:background="@mipmap/ic_flash_on_black_48dp">
