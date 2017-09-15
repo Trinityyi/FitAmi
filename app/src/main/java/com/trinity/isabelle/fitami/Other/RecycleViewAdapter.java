@@ -124,6 +124,15 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
+    public void updateData(Context _context,Long _steps, Long _distance, Long _time, String _dailyChallenge, String _top3Leaderboard) {
+        this.context=_context;
+        this.steps=(int)(long)_steps;
+        this.distance=(double) (_distance/1000.0);
+        this.time=(double)(_time/60.0);
+        this.top3Leaderboard = _top3Leaderboard;
+        this.dailyChallenge = _dailyChallenge;
+    }
+
     @Override
     public int getItemViewType(int position) {
 

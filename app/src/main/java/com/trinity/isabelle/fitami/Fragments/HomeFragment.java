@@ -46,6 +46,7 @@ public class HomeFragment extends DataFragment {
     private int dailyMedal;
     // #1 nickname, points , #2 nickname, points , #3 nickname, points, user rank, points
     private String top3Leaderboard, dailyChallenge;
+    private RecycleViewAdapter recycleViewAdapter;
     protected RecyclerView recyclerView;
 
     public HomeFragment() {
@@ -108,6 +109,7 @@ public class HomeFragment extends DataFragment {
         }
         RecyclerView.Adapter adapter = new RecycleViewAdapter(context,lastSteps, lastMeters, lastTime, dailyChallenge, top3Leaderboard);
         recyclerView.setAdapter(adapter);
+        recycleViewAdapter = (RecycleViewAdapter) adapter;
 
         return view;
     }
@@ -127,8 +129,8 @@ public class HomeFragment extends DataFragment {
         if(sharedPref.getLong(getString(R.string.preference_daily_medal_key) + dailyMedal + 12, 0l) > 0l){
             dailyChallenge += getResources().getString(R.string.daily_challenge_medal_completed);
         }
-        RecyclerView.Adapter adapter = new RecycleViewAdapter(context,lastSteps, lastMeters, lastTime, dailyChallenge, top3Leaderboard);
-        recyclerView.setAdapter(adapter);
+        recycleViewAdapter.updateData(context,lastSteps, lastMeters, lastTime, dailyChallenge, top3Leaderboard);
+        recycleViewAdapter.notifyDataSetChanged();
     }
 
 
