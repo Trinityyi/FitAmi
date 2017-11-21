@@ -106,7 +106,6 @@ public class BadgeFragment extends DataFragment {
             }
         }
 
-
         return view;
     }
 

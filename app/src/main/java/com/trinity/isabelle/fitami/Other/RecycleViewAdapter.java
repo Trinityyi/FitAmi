@@ -91,7 +91,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()) {

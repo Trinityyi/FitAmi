@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -381,9 +381,6 @@
                     app:srcCompat="@mipmap/daiy_challenge" />
 
             </RelativeLayout>
-
         </LinearLayout>
-
     </RelativeLayout>
-
-</FrameLayout>
+</ScrollView>

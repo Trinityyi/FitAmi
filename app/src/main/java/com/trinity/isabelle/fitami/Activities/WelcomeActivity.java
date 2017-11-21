@@ -66,8 +66,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
                     // layouts of all welcome sliders
                     layouts = new int[]{
-                            R.layout.welcome_slide,
-                            R.layout.activity_settings
+                            R.layout.welcome_slide1,
+                            R.layout.welcome_slide2
                     };
 
                     WelcomeActivity.MyViewPagerAdapter myViewPagerAdapter = new WelcomeActivity.MyViewPagerAdapter();

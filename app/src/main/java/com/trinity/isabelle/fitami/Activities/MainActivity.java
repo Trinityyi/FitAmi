@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 long lastTime = sharedPref.getLong(getString(R.string.preference_time_key), 0l);
                 long lastSteps = sharedPref.getLong(getString(R.string.preference_step_key), 0l);
                 long lastMeters = sharedPref.getLong(getString(R.string.preference_meter_key), 0l);
-                //getHomeFragment().setFragmentData();
+
                 if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
                     ((DataFragment)getSupportFragmentManager().findFragmentByTag(CURRENT_TAG)).setFragmentData();
                 }

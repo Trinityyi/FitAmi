@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:clickable="true"
+    android:clickable="false"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="8dp"
@@ -14,72 +14,82 @@
     app:contentPadding="10dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="200dp">
 
-        <RelativeLayout
-            android:id="@+id/rankLayout"
-            android:layout_width="180dp"
+        <LinearLayout
+            android:id="@+id/userRankLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:paddingStart="0dp"
-            android:paddingEnd="16dp">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/userRankTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="@string/my_rank"
-                android:textSize="20sp" />
+            <RelativeLayout
+                android:id="@+id/scoreLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="0.5"
+                android:paddingEnd="16dp"
+                android:paddingStart="0dp">
 
-            <TextView
-                android:id="@+id/userRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignEnd="@+id/userRankTxt"
-                android:textSize="20sp" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/userScoreTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/my_points"
+                    android:textSize="20sp" />
 
-        <RelativeLayout
-            android:id="@+id/scoreLayout"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_toEndOf="@+id/rankLayout"
-            android:paddingStart="0dp"
-            android:paddingEnd="16dp">
+                <TextView
+                    android:id="@+id/userScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/userScoreTxt"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="20sp" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/userScoreTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="@string/my_points"
-                android:textSize="20sp" />
+            <RelativeLayout
+                android:id="@+id/rankLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="0.5"
+                android:paddingEnd="16dp"
+                android:paddingStart="0dp">
 
-            <TextView
-                android:id="@+id/userScore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignEnd="@+id/userScoreTxt"
-                android:textSize="20sp" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/userRankTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/my_rank"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/userRank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/userRankTxt"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:layout_below="@+id/scoreLayout"
+            android:layout_below="@+id/userRankLayout"
             android:background="@color/colorDivider" />
 
         <RelativeLayout
             android:id="@+id/pointLeaderboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rankLayout"
-            android:layout_marginTop="5dp">
+            android:layout_below="@+id/userRankLayout"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal">
 
             <RelativeLayout
                 android:id="@+id/thirdPlace"
@@ -104,14 +114,14 @@
                     android:layout_below="@+id/thirdProfile"
                     android:layout_centerHorizontal="true"
                     android:text="@string/_3"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/thirdNicknameEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/thirdRankTxt"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:id="@+id/thirdPointsEdit"
@@ -145,7 +155,7 @@
                     android:layout_below="@+id/firstProfile"
                     android:layout_centerHorizontal="true"
                     android:text="@string/_1"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/firstNicknameEdit"
@@ -160,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/firstNicknameEdit"
                     android:layout_centerHorizontal="true"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -185,7 +195,7 @@
                     android:layout_below="@+id/secondProfile"
                     android:layout_centerHorizontal="true"
                     android:text="@string/_2"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/secondNicknameEdit"
@@ -200,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/secondNicknameEdit"
                     android:layout_centerHorizontal="true"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </RelativeLayout>
         </RelativeLayout>
 

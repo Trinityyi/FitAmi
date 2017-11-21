@@ -17,7 +17,6 @@ import com.trinity.isabelle.fitami.R;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class LeaderboardAdaper extends BaseAdapter implements Filterable {
 
     Context context;

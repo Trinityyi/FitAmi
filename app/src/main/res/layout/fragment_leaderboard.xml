@@ -1,83 +1,88 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.trinity.isabelle.fitami.Fragments.LeaderboardFragment">
-
-    <RelativeLayout
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingTop="5dp">
+        android:paddingTop="5dp"
+        tools:context="com.trinity.isabelle.fitami.Fragments.LeaderboardFragment">
 
-        <RelativeLayout
-            android:id="@+id/layoutRank"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="0dp">
+     <LinearLayout
+         android:id="@+id/layoutUserData"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:weightSum="1">
 
-            <TextView
-                android:id="@+id/textUserRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="@string/my_rank"
-                android:textSize="20sp" />
+         <RelativeLayout
+             android:id="@+id/layoutData"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:layout_marginBottom="16dp"
+             android:layout_toEndOf="@+id/layoutRank"
+             android:layout_weight="0.5"
+             android:paddingEnd="16dp"
+             android:paddingStart="0dp">
 
-            <TextView
-                android:id="@+id/editUserRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/textUserRank"
-                android:layout_alignParentEnd="true"
-                android:textSize="20sp" />
-        </RelativeLayout>
+             <TextView
+                 android:id="@+id/txtUserData"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentStart="true"
+                 android:text="@string/score"
+                 android:textSize="20sp" />
 
-        <RelativeLayout
-            android:id="@+id/layoutData"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_toEndOf="@+id/layoutRank"
-            android:paddingEnd="16dp"
-            android:paddingStart="0dp">
+             <TextView
+                 android:id="@+id/editUserData"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignEnd="@+id/txtUserData"
+                 android:layout_alignParentEnd="true"
+                 android:textSize="20sp" />
+         </RelativeLayout>
 
-            <TextView
-                android:id="@+id/txtUserData"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="@string/score"
-                android:textSize="20sp" />
+         <RelativeLayout
+             android:id="@+id/layoutRank"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:layout_marginBottom="16dp"
+             android:layout_weight="0.5"
+             android:paddingEnd="16dp"
+             android:paddingStart="0dp">
 
-            <TextView
-                android:id="@+id/editUserData"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/txtUserData"
-                android:layout_alignParentEnd="true"
-                android:textSize="20sp" />
-        </RelativeLayout>
+             <TextView
+                 android:id="@+id/textUserRank"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentStart="true"
+                 android:text="@string/my_rank"
+                 android:textSize="20sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_below="@+id/layoutData"
-            android:background="@color/colorDivider" />
+             <TextView
+                 android:id="@+id/editUserRank"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignEnd="@+id/textUserRank"
+                 android:layout_alignParentEnd="true"
+                 android:textSize="20sp" />
+         </RelativeLayout>
+     </LinearLayout>
 
-        <Spinner
-            android:id="@+id/leaderboardSpinner"
-            style="@style/Widget.AppCompat.Spinner.Underlined"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/layoutData"
-            android:layout_marginTop="5dp"
-            android:entries="@array/leaderboard_array" />
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="1dip"
+         android:layout_below="@+id/layoutUserData"
+         android:background="@color/colorDivider" />
+
+     <Spinner
+         android:id="@+id/leaderboardSpinner"
+         style="@style/Widget.AppCompat.Spinner.Underlined"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentEnd="true"
+         android:layout_below="@+id/layoutUserData"
+         android:layout_marginTop="5dp"
+         android:entries="@array/leaderboard_array" />
 
         <ListView
             android:id="@+id/leaderboardListView"
@@ -85,6 +90,4 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/leaderboardSpinner" />
 
-    </RelativeLayout>
-
-</FrameLayout>
+ </RelativeLayout>
