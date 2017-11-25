@@ -15,8 +15,8 @@
     <string name="gender">Φύλο</string>
     <string name="height">Υψος</string>
     <string name="hours">%.1f ώρες</string>
-    <string name="my_points">Πόντοι μου:</string>
-    <string name="my_rank">Η κατάταξή μου:</string>
+    <string name="my_points">Πόντοι:</string>
+    <string name="my_rank">Kατάταξή:</string>
     <string name="nav_badge">Μετάλλια δραστηριότητας</string>
     <string name="profile">Προφίλ</string>
     <string name="next">ΕΠΟΜΕΝΟ</string>
