@@ -12,17 +12,19 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <ImageView
-            android:layout_width="@dimen/img_width_height"
-            android:layout_height="@dimen/img_width_height"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_width="170dp"
+            android:layout_height="175dp"
+            android:layout_weight="1.63"
+            android:src="@mipmap/tut1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/slide_1_title"
+            android:text="@string/tut_1_title"
             android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/slide_title"
             android:textStyle="bold" />
@@ -30,7 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:paddingLeft="@dimen/desc_padding"
             android:paddingRight="@dimen/desc_padding"
             android:text="@string/tut_1_desc"
